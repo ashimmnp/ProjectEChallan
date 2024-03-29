@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DbO+1xZ9J40ls3Z++IVgGb3GkKcWXAqo4fXJnq+gF8NUf61pVr4R5LCvO+IfGwwf" crossorigin="anonymous">
+    <style>
+        :root {
+            --primary-color: royalblue;
+            --secondary-color: #FF5349;
+            --text-color: black;
+        }
+        body {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+        }
+        h1 {
+            color: var(--text-color);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid var(--primary-color); /* Added border */
+            border-radius: 5px;
+            outline: none; /* Remove input outline */
+            color: var(--text-color);
+        }
+        input[type="text"]:focus {
+            border-color: #4169E1; /* Change border color on focus */
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #4169E1;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: transparent; /* Removed background color */
+            border: 1px solid var(--primary-color); /* Added border */
+            border-radius: 10px;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+        .result-container p {
+            margin-bottom: 5px;
+        }
+        .result-container button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result-container button:hover {
+            background-color: #4169E1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Search</h1>
+        <form action="/checkRegistration" method="post" class="text-center">
+            <input type="text" name="registrationNumber" placeholder="Enter Registration Number">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if result %}
+        <div class="result-container">
+            <h2 class="text-center">Search Result for Vechile: Search</h2>
+            <p>VehicleId: {{ result[1] }}</p>
+            <p>RegNumber: {{ result[2] }}</p>
+            <p>RegDate: {{ result[3] }}</p>
+            <p>RegExp: {{ result[4] }}</p>
+            <p>Reg Status: {{ result[5] }}</p>
+        </div>
+        {% else %}
+        <p class="text-center">No record found</p>
+            <form action="/add-record" method="post">
+        <button type="submit">Create Challan</button>
+    </form>
+        {% endif %}
+    </div>
+</body>
+</html>
