@@ -6,26 +6,6 @@ app = Flask(__name__)
 @app.route('/')
 def welcome():
     return render_template('index.html')
-
-
-# def search():
-#     return render_template("checkRegistration.html")
-
-@app.route('/checkRegistration', methods=['GET', 'POST'])
-def checkRegistration():
-    if request.method == 'POST':
-        regNumber = request.form.get('registrationNumber')
-        conn = db.engine.connect()
-        sql = text("SELECT * FROM vehicle_registration WHERE registrationNumber = :regNumber")
-        resultfetch = conn.execute(sql)
-        result = resultfetch.fetchone()
-        if result:
-            return render_template('checkRegistration.html', result=result, registrationNumber=regNumber)
-        else:
-            return render_template('checkRegistration.html', result=None, registrationNumber=regNumber)
-    return render_template('checkRegistration.html')
-
-
 @app.route('/add-record', methods=['POST'])
 def add_record():
     # Redirect to the page where record can be added
@@ -44,6 +24,16 @@ def adminDB():
 @app.route('/trafficOfficerDB')
 def trafficOfficerDB():
     return render_template('trafficOfficerDB.html')
+
+@app.route('/sample_login', methods=['GET', 'POST'])
+def sample_login():
+    return render_template('trafficOfficerDB.html')
+
+
+@app.route('/addUser',methods=['GET', 'POST'])
+def addUser():
+    return render_template('addUser.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
