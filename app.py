@@ -34,6 +34,9 @@ def sample_login():
 def addUser():
     return render_template('addUser.html')
 
+@app.route('/newChallan', methods=['GET', 'POST'])
+def newChallan():
+    return render_template('newChallan.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
