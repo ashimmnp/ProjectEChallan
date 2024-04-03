@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile</title>
+<link rel="stylesheet" href="css/userProfile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="profile">
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-image">
+                    <img src="images/trafficPhoto.jpg" alt="Profile Picture">
+                </div>
+                <div class="profile-details">
+                    <h2 class="profile-name">John Doe</h2>
+                    <p class="profile-username">@johndoe</p>
+                    <button class="change-photo">Change Photo</button>
+                </div>
+            </div>
+            <div class="profile-admin">
+                <span class="profile-role">administrator</span>
+                <p class="profile-joined">Joined 09 Dec 2017</p>
+                <button type="button" class="btn-logout">
+                     <i class="fa fa-sign-out">Logout</i>
+                    </button>
+            </div>
+
+        </div>
+        <div class="profile-form">
+            <form action="#" method="post">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-item">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" placeholder=" ">
+                        </div>
+                        <div class="input-item">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder=" ">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bold-text">
+                    <span>Change password</span>
+                </div>
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="current-password" placeholder=" ">
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="new-password" placeholder=" ">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder=" ">
+                </div>
+                <div class="password-requirements">
+                    <h3>Password must contain:</h3>
+                    <ul>
+                        <li>    At least 8 characters</li>
+                        <li>    At least 1 uppercase character</li>
+                        <li>    At least 1 lowercase character</li>
+                        <li>    At least 1 number or special character</li>
+                    </ul>
+
+            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn-save">Save Changes</button>
+
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
