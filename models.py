@@ -61,7 +61,7 @@ class rulesAndRegulations(db.Model):
     __tablename__ = 'rulesAndRegulations'
 
     rulesId = db.Column(db.String(255), primary_key=True)
-    rulecategory = db.Column(db.String(255))
+    rulescategory = db.Column(db.String(255))
     ruleDesc = db.Column(db.String(225))
     fineAmount = db.column(db.String(255))
 

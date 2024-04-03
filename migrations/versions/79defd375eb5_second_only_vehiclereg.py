@@ -1,9 +1,7 @@
 """Second only vehiclereg
-
 Revision ID: 79defd375eb5
-Revises: 
+Revises:
 Create Date: 2024-03-28 17:52:32.339299
-
 """
 from alembic import op
 import sqlalchemy as sa

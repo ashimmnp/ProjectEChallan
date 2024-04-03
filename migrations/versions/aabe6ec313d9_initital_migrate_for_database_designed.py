@@ -1,9 +1,7 @@
 """Initital migrate for database designed
-
 Revision ID: aabe6ec313d9
 Revises: 79defd375eb5
 Create Date: 2024-04-01 20:47:55.868220
-
 """
 from alembic import op
 import sqlalchemy as sa

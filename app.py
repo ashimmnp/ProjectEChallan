@@ -80,13 +80,6 @@ def addUser():
             return redirect(url_for('addUser'))
     return render_template('addUser.html')
 
-
-# @app.route('/')
-# def adduserSuccess():
-#     success_flag = request.args.get('adduserSuccess', False)
-#     return render_template('addUser.html', success=success_flag)
-
-
 @app.route('/newChallan', methods=['GET', 'POST'])
 def newChallan():
     return render_template('newChallan.html')

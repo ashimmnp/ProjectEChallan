@@ -1,9 +1,7 @@
 """Added a new table named rules to ensure a proper data and rule description in it and be selected by officer later
-
 Revision ID: 9349e9ca0e38
 Revises: aabe6ec313d9
 Create Date: 2024-04-02 16:33:41.266970
-
 """
 from alembic import op
 import sqlalchemy as sa
