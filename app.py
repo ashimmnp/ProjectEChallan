@@ -88,11 +88,16 @@ def newChallan():
     return render_template('newChallan.html')
 
 
-@app.route('/userManagementPortal')
+@app.route('/userManagementPortal', methods=['GET','POST'])
 def userManagementPortal():
     # officers = Officer.query.all()
-    officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).all()
-    return render_template('userManagementPortal.html', officers=officers)
+    if request.method == 'POST':
+        search = request.form['query']
+        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).filter(Users.name.ilike(f'%{search}')).all()
+        return render_template('userManagementPortal.html', officers=officers)
+    else:
+        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).all()
+        return render_template('userManagementPortal.html', officers=officers)
 
 
 @app.route('/updateUser/<int:officer_id>', methods=['GET', 'POST'])
