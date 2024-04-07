@@ -1,12 +1,14 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, abort, session
+from flask_login import UserMixin, login_user
 from models import *
 import secrets
 from sqlalchemy import text
 import pymysql
 from database import db
 from flask_migrate import Migrate
+from werkzeug.security import check_password_hash
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/dataechallan'
 secret_key = secrets.token_urlsafe(32)
 app.secret_key = secret_key
@@ -42,9 +44,46 @@ def trafficOfficerDB():
     return render_template('trafficOfficerDB.html')
 
 
-@app.route('/sample_login', methods=['GET', 'POST'])
-def sample_login():
-    return render_template('trafficOfficerDB.html')
+class users(UserMixin, db.Model):
+    __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
+    userid = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    usertype = db.Column(db.String(50), nullable=False)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Query the database to find the user
+        user = Users.query.filter_by(username=username).first()
+
+        if user is not None and user.password == password:
+            # Store user information in the session
+            session['username'] = user.username
+            session['usertype'] = user.usertype
+            print(user.usertype)
+            # Redirect based on user type
+            if user.usertype == 'admin':
+                flash('Admin login successful', 'success')
+                return redirect(url_for('adminDB'))
+            elif user.usertype == 'officer':
+                flash('Officer login successful', 'success')
+                return redirect(url_for('trafficOfficerDB'))
+            else:
+                flash('Invalid user type', 'error')
+                return redirect(url_for('login'))
+        else:
+            flash('Invalid username or password', 'error')
+            return redirect(url_for('login'))
+
+    # GET request
+    return render_template('index.html')
 
 
 @app.route('/addUser', methods=['GET', 'POST'])
@@ -79,6 +118,7 @@ def addUser():
             flash('Something went wrong')
             return redirect(url_for('addUser'))
     return render_template('addUser.html')
+
 
 @app.route('/newChallan', methods=['GET', 'POST'])
 def newChallan():
