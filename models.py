@@ -79,6 +79,6 @@ class rulesAndRegulations(db.Model):
     rulesId = db.Column(db.String(255), primary_key=True)
     rulecategory = db.Column(db.String(255))
     ruleDesc = db.Column(db.String(225))
-    fineStartAmount = db.column(db.Integer)
-    fineEndAmount = db.column(db.Integer)
+    fineStartAmount = db.column(db.String(255))
+    fineEndAmount = db.column(db.String(255))
 
