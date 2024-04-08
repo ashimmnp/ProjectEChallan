@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, abort, session
 from flask_login import UserMixin, login_user
 from models import *
-import secrets
 from sqlalchemy import text
 import pymysql
 from database import db
