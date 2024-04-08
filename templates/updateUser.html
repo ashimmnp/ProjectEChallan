@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Officer Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Update Officer Details</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST" action="{{ url_for('updateUser', officer_id=officer.officerId )}}">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ officer.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="badge_number">Badge Number</label>
+                        <input type="text" class="form-control" id="badge_number" name="badge_number" value="{{ officer.badgeNumber }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="rank">Rank</label>
+                        <input type="text" class="form-control" id="rank" name="rank" value="{{ officer.rank }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="assigned_location">Assigned Location</label>
+                        <input type="text" class="form-control" id="assigned_location" name="assigned_location" value="{{ officer.assignedLocation }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('userManagementPortal') }}" class="btn btn-danger">Back</a>
+                </form>
+                <br><br>
+                <!-- <form action="/userManagementPortal">
+                        <button type="submit" class="btn btn-danger">Back</button>
+                </form> -->
+            </div>
+        </div>
+    </div>
+{% with message = get_flashed_messages() %}
+    {% if message %}
+        <div id="diagonal-message" class="diagonal-message">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-header"></div>
+                            <div class="card-body">
+                                <p class="card-text">{{ message[0] }}</p>
+                                <button class="btn btn-light" onclick="window.location.reload()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
+</body>
+</html>
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Officer Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Update Officer Details</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST" action="">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ officer[1] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="badge_number">Badge Number</label>
+                        <input type="text" class="form-control" id="badge_number" name="badge_number" value="{{ officer[2] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="rank">Rank</label>
+                        <input type="text" class="form-control" id="rank" name="rank" value="{{ officer[3] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="assigned_location">Assigned Location</label>
+                        <input type="text" class="form-control" id="assigned_location" name="assigned_location" value="{{ officer[4] }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+-->

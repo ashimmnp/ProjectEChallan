@@ -1,4 +1,5 @@
 from database import db
+from werkzeug.security import check_password_hash
 
 
 class ChallanHistory(db.Model):
@@ -29,7 +30,11 @@ class Users(db.Model):
     username = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    usertype = db.Column(db.String(50), nullable=False)
+    usertype = db.Column(db.String(50), nullable=False) #Ends 32 and 33 is blank begins 34
+
+    def check_password(username, password):
+        user = Users.query.filter_by(username=username).first()
+        return check_password_hash(user.hashed_password, password) if user else False
 
 class Vehicle(db.Model):
     __tablename__ = 'vehicle'
@@ -52,16 +57,28 @@ class VehicleOwner(db.Model):
     registrationNumber = db.Column(db.String(255), primary_key=True)
     vehicleid = db.Column(db.String(255))
     citizenId = db.Column(db.String(255))
+    licenseId = db.Column(db.String(255))
     Name = db.Column(db.String(255))
     RegistrationExp = db.Column(db.Date)
     RegistrationStatus = db.Column(db.String(50))
+
+class citizenDetails(db.Model):
+    __tablename__ = 'citizensDetails'
+    licenseId = db.Column(db.String(255), primary_key=True)
+    name = db.Column(db.String(255))
+    address = db.Column(db.String(255))
+    dateIssued = db.Column(db.Date)
+    fatherName = db.Column(db.String(255))
+    dateofBirth = db.Column(db.Date)
+    expirationDate = db.Column(db.Date)
 
 
 class rulesAndRegulations(db.Model):
     __tablename__ = 'rulesAndRegulations'
 
     rulesId = db.Column(db.String(255), primary_key=True)
-    rulescategory = db.Column(db.String(255))
+    rulecategory = db.Column(db.String(255))
     ruleDesc = db.Column(db.String(225))
-    fineAmount = db.column(db.String(255))
+    fineStartAmount = db.column(db.String(255))
+    fineEndAmount = db.column(db.String(255))
 

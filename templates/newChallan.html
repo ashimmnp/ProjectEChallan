@@ -3,11 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create New Challan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DbO+1xZ9J40ls3Z++IVgGb3GkKcWXAqo4fXJnq+gF8NUf61pVr4R5LCvO+IfGwwf" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: royalblue;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        This is the new challan user dashboard
+
+         <h2>New Challan</h2>
+    <form action="#" method="post" id="createChallan">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label">Location:</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="registrationNumber" class="form-label">Registration Number:</label>
+            <input type="text" class="form-control" id="registrationNumber" name="registrationNumber" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="licenceId" class="form-label">Licence Number:</label>
+            <input type="text" class="form-control" id="licenceId" name="licenceId" required>
+        </div>
+
+         <div class="mb-3">
+             <label for="violation" class="form-label">Violation:</label> <a href="rulesStructure" target="_blank"><label> Review Rule</label></a>
+            <select class="form-select" id="violationCategory" name="violationCategory" required>
+                <option value="admin">Category A</option>
+                <option value="officer">Category B</option>
+            </select>
+             <select class="form-select" id="violationReason" name="violationReason" required>
+                <option value="admin">A-2</option>
+                <option value="officer">B-1</option>
+            </select>
+        </div>
+
+        <button type="submit">Create Challan</button>
+    </form>
+
     </div>
 
 </body>

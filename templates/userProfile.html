@@ -82,6 +82,25 @@
         </div>
     </div>
 </div>
+{% with message = get_flashed_messages() %}
+    {% if message %}
+        <div id="diagonal-message" class="diagonal-message">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-header"></div>
+                            <div class="card-body">
+                                <p class="card-text">{{ message[0] }}</p>
+                                <button class="btn btn-light" onclick="window.location.reload()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
 </body>
 </html>
 
