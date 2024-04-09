@@ -132,5 +132,63 @@ def newChallan():
     return render_template('newChallan.html')
 
 
+
+@app.route('/userManagementPortal', methods=['GET','POST'])
+def userManagementPortal():
+    # officers = Officer.query.all()
+    if request.method == 'POST':
+        search = request.form['query']
+        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).filter(Users.name.ilike(f'%{search}')).all()
+        return render_template('userManagementPortal.html', officers=officers)
+    else:
+        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).all()
+        return render_template('userManagementPortal.html', officers=officers)
+
+
+@app.route('/updateUser/<int:officer_id>', methods=['GET', 'POST'])
+def updateUser(officer_id):
+    officer = Officer.query.get_or_404(officer_id)
+    if request.method == 'POST':
+        try:
+            officer.name = request.form['name']
+            officer.badgeNumber = request.form['badge_number']
+            officer.rank = request.form['rank']
+            officer.assignedLocation = request.form['assigned_location']
+            db.session.commit()
+            flash('Successfully updated', 'success')
+            return redirect(url_for('updateUser', officer_id=officer_id))
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            flash('Something went wrong in the system. Please try again', 'error')
+    return render_template('updateUser.html', officer=officer)
+
+
+@app.route('/deleteUser/<string:username>', methods=['DELETE'])
+def deleteUser(username):
+    try:
+        officer = Users.query.filter_by(username=username).first()
+
+        if officer:
+            db.session.delete(officer)
+            db.session.commit()
+            return 'Officer Deleted Successfully', 200
+        else:
+            return 'Officer Not found', 404
+    except SQLAlchemyError as e:
+        db.session.rollback()
+    return 'Problem, 500'
+
+@app.route('/rulesStructure')
+def rulesStructure():
+    rules_category = {}
+    rules = rulesAndRegulations.query.all()
+    for rule in rules:
+        if rule.rulecategory not in rules_category:
+            rules_category[rule.rulecategory] = []
+        rules_category[rule.rulecategory].append(rule)
+    print(rules_category)
+    return render_template('ruleStr.html', rules_category=rules_category)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
