@@ -86,6 +86,8 @@ def login():
 
     # GET request
     return render_template('index.html')
+
+
 @app.route('/sample_login', methods=['GET', 'POST'])
 def sample_login():
     return render_template('trafficOfficerDB.html')
