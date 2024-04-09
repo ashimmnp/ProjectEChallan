@@ -99,7 +99,7 @@ def addUser():
         name = request.form['name']
         officer_id = request.form['officer_id']
         user_id = request.form['user_id']
-        user_name = request.form['user_name']
+        user_name = request.form['username']
         badge_number = request.form['badge_number']
         rank = request.form['rank']
         user_type = request.form['user_type']
