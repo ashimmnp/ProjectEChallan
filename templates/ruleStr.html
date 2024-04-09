@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traffic Rules Structure</title>
+<style>
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #efedee;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: royalblue;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    color: white;
+}
+h2{
+    color: white;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+ td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    background-color: rgb(217, 66, 66);
+    color: #ddd;
+}
+th {
+    background-color:white;
+    color: black;
+}
+.category {
+    background-color: #f3ebf4;
+    font-weight: bold;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Traffic Rules Structure</h1>
+    {% for category, rules in rules_category.items() %}
+    <h2>{{ category }}</h2>
+    <table>
+        <tr>
+            <th>Rules Id</th>
+            <th>Rule</th>
+        </tr>
+        {% for rule in rules %}
+            <tr>
+                <td>{{ rule.rulesId }}</td>
+                <td>{{ rule.ruleDesc }}</td>
+            </tr>
+        {%  endfor %}
+    </table>
+    {% endfor %}
+</div>
+</body>
+</html>

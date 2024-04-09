@@ -1,0 +1,21 @@
+These are the sample rules that needs to be implement in  database.
+
+CategoryA-Nrs500
+- Not wearing seat belts (for vehicles where applicable) | A-01 |
+- Not wearing helmets (for motorcycles | A-02 |
+- Driving a vehicle with defects | A-03 |
+- Failure to renew vehicle registration | A-04 |
+- Violating lane discipline | A-05 |
+- Ignoring traffic signals | A-06 |
+- Ignoring pedestrian crossing signals | A-07 |
+- Illegal Parking | A-08 |
+
+CategoryB-Nrs1000
+- Driving without carrying a license while driving | B-01 |
+- Driving a vehicle without registration | B-02 |
+- Driving without necessary permits | B-03 |
+- Blocking traffic flow | B-04 |
+
+
+CategoryC-Nrs2000
+- Driving under the influence of alcohol or drugs | C-01 |

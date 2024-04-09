@@ -82,6 +82,17 @@ def addUser():
             return redirect(url_for('addUser'))
     return render_template('addUser.html')
 
+@app.route('/checkRegistration', methods=['GET', 'POST'])
+def checkRegistration():
+    if request.method == 'POST':
+        regNumber = request.form.get('registrationNumber')
+        result = Vehicle.query.filter(func.lower(Vehicle.RegistrationNumber)==regNumber.lower()).first()
+        print(result)
+        if result:
+            return render_template('checkRegistration.html', result=result, registrationNumber=regNumber)
+        else:
+            return render_template('checkRegistration.html', result=None, registrationNumber=regNumber)
+    return render_template('checkRegistration.html')
 
 @app.route('/newChallan', methods=['GET', 'POST'])
 def newChallan():
@@ -132,6 +143,17 @@ def deleteUser(username):
     except SQLAlchemyError as e:
         db.session.rollback()
     return 'Problem, 500'
+
+@app.route('/rulesStructure')
+def rulesStructure():
+    rules_category = {}
+    rules = rulesAndRegulations.query.all()
+    for rule in rules:
+        if rule.rulecategory not in rules_category:
+            rules_category[rule.rulecategory] = []
+        rules_category[rule.rulecategory].append(rule)
+    print(rules_category)
+    return render_template('ruleStr.html', rules_category=rules_category)
 
 if __name__ == '__main__':
     app.run(debug=True)
