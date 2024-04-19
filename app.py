@@ -2,15 +2,14 @@ from flask import Flask, request, render_template, redirect, url_for, flash, abo
 from flask_login import UserMixin, login_user
 from models import *
 import secrets
-from sqlalchemy import text
+from sqlalchemy import text, func
 import pymysql
 from database import db
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 import traceback
 
-
-app = Flask(__name__,template_folder='templates')
+app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/dataechallan'
 secret_key = secrets.token_urlsafe(32)
 app.secret_key = secret_key
@@ -93,13 +92,14 @@ def login():
         flash('An error occurred', 'error')
         return redirect(url_for('login'))
 
+
 @app.route('/addUser', methods=['GET', 'POST'])
 def addUser():
     if request.method == 'POST':
         name = request.form['name']
         officer_id = request.form['officer_id']
         user_id = request.form['user_id']
-        user_name = request.form['username']
+        user_name = request.form['user_name']
         badge_number = request.form['badge_number']
         rank = request.form['rank']
         user_type = request.form['user_type']
@@ -132,13 +132,13 @@ def newChallan():
     return render_template('newChallan.html')
 
 
-
-@app.route('/userManagementPortal', methods=['GET','POST'])
+@app.route('/userManagementPortal', methods=['GET', 'POST'])
 def userManagementPortal():
     # officers = Officer.query.all()
     if request.method == 'POST':
         search = request.form['query']
-        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).filter(Users.name.ilike(f'%{search}')).all()
+        officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).filter(
+            Users.name.ilike(f'%{search}')).all()
         return render_template('userManagementPortal.html', officers=officers)
     else:
         officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).all()
@@ -178,6 +178,7 @@ def deleteUser(username):
         db.session.rollback()
     return 'Problem, 500'
 
+
 @app.route('/rulesStructure')
 def rulesStructure():
     rules_category = {}
@@ -188,6 +189,37 @@ def rulesStructure():
         rules_category[rule.rulecategory].append(rule)
     print(rules_category)
     return render_template('ruleStr.html', rules_category=rules_category)
+
+
+@app.route('/checkRegistration', methods=['GET', 'POST'])
+def checkRegistration():
+    if request.method == 'POST':
+        regNumber = request.form.get('registrationNumber')
+        result = Vehicle.query.filter(func.lower(Vehicle.RegistrationNumber) == regNumber.lower()).first()
+        print(result)
+        if result:
+            return render_template('checkRegistration.html', result=result, registrationNumber=regNumber)
+        else:
+            return render_template('checkRegistration.html', result=None, registrationNumber=regNumber)
+    return render_template('checkRegistration.html')
+
+
+@app.route('/vehicleDetailAdd')
+def vehicleDetailAdd():
+    return render_template('vehicleDetailAdd.html')
+
+
+@app.route('/registrationDetailAdd')
+def registrationDetailAdd():
+    return render_template('registrationDetailAdd.html')
+
+@app.route('/issueChallan')
+def issueChallan():
+    return render_template('issueChallan.html')
+
+@app.route('/userProfile')
+def userProfile():
+    return render_template('userProfile.html')
 
 
 if __name__ == '__main__':
