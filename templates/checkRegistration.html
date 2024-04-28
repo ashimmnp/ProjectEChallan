@@ -71,6 +71,35 @@
     </style>
 </head>
 <body>
+
+    <div class="container">
+        <h1 class="text-center">Check and Search License Details</h1>
+        <form action="/checkLicense" method="post" class="text-center">
+            <input type="text" name="licenseNumber" placeholder="Enter License Number">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if result %}
+        <div class="result-container">
+            <h2 class="text-center">Search Result for Vechile: {{ licenseNumber }}</h2>
+            <p><b>License Id:</b> {{ result.LicenseId }}</p>
+            <p><b>Name:</b> {{ result.name }}</p>
+            <p><b>Address:</b> {{ result.address }}</p>
+            <p><b>Father's Name:</b> {{ result.fatherName }}</p>
+            <p><b>Status:</b> {{ result.status }}</p>
+            <p><b>Issued Date:</b> {{ result.issueDate }}</p>
+            <p><b>Expiration Date:</b> {{ result.expireDate }}</p>
+        </div>
+        {% else %}
+        <p class="text-center">No record found {{ registrationNumber }}</p>
+            <form action="/add-record" method="post">
+        <button type="submit">Create Challan</button>
+    </form>
+        {% endif %}
+    </div>
+    <br><br><br>
+
+
     <div class="container">
         <h1 class="text-center">Check and Search Vehicle Details</h1>
         <form action="/checkRegistration" method="post" class="text-center">

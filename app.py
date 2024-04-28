@@ -203,6 +203,18 @@ def checkRegistration():
             return render_template('checkRegistration.html', result=None, registrationNumber=regNumber)
     return render_template('checkRegistration.html')
 
+@app.route('/checkLicense', methods=['GET', 'POST'])
+def checkLicense():
+    if request.method == 'POST':
+        licenseId = request.form.get('licenseNumber')
+        result = licencesData.query.filter(func.lower(licencesData.licenseId) == licenseId.lower()).first()
+        print(result)
+        if result:
+            return render_template('checkRegistration.html', result=result, licenseNumber=regNumber)
+        else:
+            return render_template('checkRegistration.html', result=None, licenseNumber=regNumber)
+    return render_template('checkRegistration.html')
+
 
 @app.route('/vehicleDetailAdd')
 def vehicleDetailAdd():
