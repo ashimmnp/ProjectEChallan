@@ -233,6 +233,73 @@ def issueChallan():
 def userProfile():
     return render_template('userProfile.html')
 
+@app.route('/update_vehicleDetail', methods=['POST'])
+def update_vehicleDetail():
+    if request.method == 'POST':
+        try:
+            vehicle_type = request.form.get('vehicle_type')
+            make = request.form.get('make')
+            chassis_number = request.form.get('chassis_number')
+            engine_number = request.form.get('engine_number')
+            registration_id = request.form.get('registration_id')
+            registration_number = request.form.get('registration_number')
+            registration_date = request.form.get('registration_date')
+            vehicle_category = request.form.get('vehicle_category')
+            vehicle_model = request.form.get('vehicle_model')
+            vehicle_custom_tax_id = request.form.get('vehicle_custom_tax_id')
+
+            # Update configuration data in the database
+            configuration = Configuration(
+                vehicle_type=vehicle_type,
+                make=make,
+                chassis_number=chassis_number,
+                engine_number=engine_number,
+                registration_id=registration_id,
+                registration_number=registration_number,
+                registration_date=registration_date,
+                vehicle_category=vehicle_category,
+                vehicle_model=vehicle_model,
+                vehicle_custom_tax_id=vehicle_custom_tax_id
+            )
+            db.session.add(configuration)
+            db.session.commit()
+            flash('Configuration updated successfully', 'success')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'error')
+
+        return redirect(url_for('vehicleDetailAdd))
+    else:
+        return 'Method not allowed'
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        try:
+            registration_number = request.form.get('registration_number')
+            vehicle_id = request.form.get('vehicle_id')
+            citizen_id = request.form.get('citizen_id')
+            license_id = request.form.get('license_id')
+            name = request.form.get('name')
+            registration_expired = request.form.get('registration_expired')
+
+            # Update registration data in the database
+            registration = Registration(
+                registration_number=registration_number,
+                vehicle_id=vehicle_id,
+                citizen_id=citizen_id,
+                license_id=license_id,
+                name=name,
+                registration_expired=registration_expired
+            )
+            db.session.add(registration)
+            db.session.commit()
+            flash('Registration completed successfully', 'success')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'error')
+
+        return redirect(url_for('index'))  # Redirect to home page after registration
+    else:
+        return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
