@@ -233,6 +233,55 @@ def issueChallan():
 def userProfile():
     return render_template('userProfile.html')
 
+@app.route('/rulesPortal', methods=['GET', 'POST'])
+def rulesPortal():
+    if request.method == 'POST':
+        if request.form.get('action') == 'add':
+            rule_id = request.form.get('rule_id')
+            rule_category = request.form.get('rule_category')
+            rule_desc = request.form.get('rule_desc')
+
+            try:
+                rule = Rule(rule_id=rule_id, rule_category=rule_category, rule_desc=rule_desc)
+                db.session.add(rule)
+                db.session.commit()
+                flash('Rule added successfully', 'success')
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'error')
+
+        elif request.form.get('action') == 'edit':
+            rule_id = request.form.get('edit_rule_id')
+            rule = Rule.query.filter_by(rule_id=rule_id).first()
+            if rule:
+                rule.rule_category = request.form.get('edit_rule_category')
+                rule.rule_desc = request.form.get('edit_rule_desc')
+
+                try:
+                    db.session.commit()
+                    flash('Rule updated successfully', 'success')
+                except Exception as e:
+                    flash(f'An error occurred: {str(e)}', 'error')
+            else:
+                flash('Rule not found', 'error')
+
+        elif request.form.get('action') == 'delete':
+            rule_id = request.form.get('delete_rule_id')
+            rule = Rule.query.filter_by(rule_id=rule_id).first()
+            if rule:
+                try:
+                    db.session.delete(rule)
+                    db.session.commit()
+                    flash('Rule deleted successfully', 'success')
+                except Exception as e:
+                    flash(f'An error occurred: {str(e)}', 'error')
+            else:
+                flash('Rule not found', 'error')
+
+        return redirect(url_for('index'))
+
+    else:
+        rules = rulesAndRegulations.query.all()
+        return render_template('rulesPortal.html', rules=rules)
 
 if __name__ == '__main__':
     app.run(debug=True)
