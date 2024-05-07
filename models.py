@@ -1,5 +1,6 @@
 from database import db
 from werkzeug.security import check_password_hash
+from datetime import datetime
 
 
 class ChallanHistory(db.Model):
@@ -55,6 +56,7 @@ class VehicleOwner(db.Model):
     __tablename__ = 'vehicleowner'
 
     registrationNumber = db.Column(db.String(255), primary_key=True)
+    vehicleid = db.Column(db.String(255))
     citizenId = db.Column(db.String(255))
     licenseId = db.Column(db.String(255))
     Name = db.Column(db.String(255))
@@ -70,13 +72,13 @@ class licencesData(db.Model):
     fatherName = db.Column(db.String(255))
     dateofBirth = db.Column(db.Date)
     expirationDate = db.Column(db.Date)
-    @property
-    def status(self):
-        currentDate = datetime.now()
-        if self.dateIssued <= currentDate <= self.expirationDate:
-            return 'active'
-        else:
-            return 'expired'
+    # @property
+    # def status(self):
+    #     currentDate = datetime.now()
+    #     if self.dateIssued <= currentDate <= self.expirationDate:
+    #         return 'active'
+    #     else:
+    #         return 'expired'
 
 
 class rulesAndRegulations(db.Model):
@@ -85,3 +87,4 @@ class rulesAndRegulations(db.Model):
     rulesId = db.Column(db.String(255), primary_key=True)
     rulecategory = db.Column(db.String(255))
     ruleDesc = db.Column(db.String(225))
+

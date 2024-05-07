@@ -17,6 +17,7 @@
         }
         h1 {
             color: var(--text-color);
+            text-align: center;
         }
         form {
             margin-bottom: 20px;
@@ -72,6 +73,7 @@
 </head>
 <body>
 
+    <h1>License Detail Check</h1>
     <div class="container">
         <h1 class="text-center">Check and Search License Details</h1>
         <form action="/checkLicense" method="post" class="text-center">
@@ -82,14 +84,18 @@
         {% if result %}
         <div class="result-container">
             <h2 class="text-center">Search Result for Vechile: {{ licenseNumber }}</h2>
-            <p><b>License Id:</b> {{ result.LicenseId }}</p>
+            <p><b>License Id:</b> {{ result.licenseId }}</p>
             <p><b>Name:</b> {{ result.name }}</p>
             <p><b>Address:</b> {{ result.address }}</p>
             <p><b>Father's Name:</b> {{ result.fatherName }}</p>
-            <p><b>Status:</b> {{ result.status }}</p>
-            <p><b>Issued Date:</b> {{ result.issueDate }}</p>
-            <p><b>Expiration Date:</b> {{ result.expireDate }}</p>
+            <p><b>Status:</b> {{ status }}</p>
+            <p><b>Issued Date:</b> {{ result.dateIssued }}</p>
+            <p><b>Expiration Date:</b> {{ result.expirationDate }}</p>
         </div>
+        <form action="/add-record" method="get">
+            <input type="text" id="licenseId" name="licenseId" value="{{result.licenseId}}">
+        <button type="submit">Create Challan</button>
+    </form>
         {% else %}
         <p class="text-center">No record found {{ registrationNumber }}</p>
             <form action="/add-record" method="post">
@@ -99,7 +105,7 @@
     </div>
     <br><br><br>
 
-
+    <h1>Vehicle Detail Check</h1>
     <div class="container">
         <h1 class="text-center">Check and Search Vehicle Details</h1>
         <form action="/checkRegistration" method="post" class="text-center">
@@ -120,6 +126,10 @@
             <p><b>Engine Number:</b> {{ result.EngineNumber }}</p>
             <p><b>Vehicle Custom Tac Id:</b> {{ result.VehicleCustomtaxId}}</p>
         </div>
+        <form action="/add-record" method="post">
+            <input type="hidden" value="{{result.registrationId}}">
+        <button type="submit" >Create Challan</button>
+    </form>
         {% else %}
         <p class="text-center">No record found {{ registrationNumber }}</p>
             <form action="/add-record" method="post">

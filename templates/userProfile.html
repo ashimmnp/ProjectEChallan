@@ -336,31 +336,32 @@ input[type="password"] {
                     <img src="images/trafficPhoto.jpg" alt="Profile Picture">
                 </div>
                 <div class="profile-details">
-                    <h2 class="profile-name">John Doe</h2>
-                    <p class="profile-username">@johndoe</p>
+                    <h2 class="profile-name">{{name}}</h2>
+                    <p class="profile-username">@{{username}}</p>
                     <button class="change-photo">Change Photo</button>
                 </div>
             </div>
             <div class="profile-admin">
-                <span class="profile-role">administrator</span>
-                <p class="profile-joined">Joined 09 Dec 2017</p>
-                <button type="button" class="btn-logout">
+                <span class="profile-role">{{usersType}}</span>
+                <p class="profile-joined"></p>
+                <form action="/logout" method="post">
+                <button type="submit" onclick="confirmLogout()" class="btn-logout">
                      <i class="fa fa-sign-out">Logout</i>
-                    </button>
+                    </button></form>
             </div>
 
         </div>
         <div class="profile-form">
-            <form action="/change_password" method="post">
+            <form action="/userProfile" method="post">
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-item">
                             <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" placeholder=" ">
+                            <input type="text" id="fullname" name="fullname" value="{{name}}" disabled>
                         </div>
                         <div class="input-item">
                             <label for="username">Username</label>
-                            <input type="text" id="username" name="username" placeholder=" ">
+                            <input type="text" id="username" name="username" value="{{username}}" disabled>
                         </div>
                     </div>
                 </div>
@@ -419,6 +420,15 @@ input[type="password"] {
         </div>
     {% endif %}
 {% endwith %}
+<script>
+function confirmLogout() {
+    // Display a confirmation dialog
+    if (confirm("Are you sure you want to logout?")) {
+        // If the user confirms, submit the form
+        document.getElementById("logoutForm").submit();
+    }
+}
+</script>
 </body>
 </html>
 

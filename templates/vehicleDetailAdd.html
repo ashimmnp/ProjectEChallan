@@ -74,11 +74,42 @@
 </head>
 <body>
     <div class="container custom-container">
-        <form action="submit_vehicle_details" method="POST">
+        <form action="/vehicleDetailAdd" method="POST">
             <h2>Add Vehicle Details</h2>
+            {% with message = get_flashed_messages() %}
+    {% if message %}
+        <div id="diagonal-message" class="diagonal-message">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-header"></div>
+                            <div class="card-body">
+                                <p class="card-text">{{ message[0] }}</p>
+                                <button class="btn btn-light" onclick="window.location.reload()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+            <label for="vehicle_id">Vehicle Id:</label>
+            <input type="text" id="vehicle_id" name="vehicle_id" class="form-control" required>
 
             <label for="vehicle_type">Vehicle Type:</label>
-            <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" required>
+            <select id="vehicle_type" name="vehicle_type" class="form-control" required>
+                <option value="" disabled selected>Select vehicle type</option>
+                <option value="bike">Motorbike</option>
+                <option value="scooter">Scooter</option>
+                <option value="car">Car</option>
+                <option value="van">Van</option>
+                <option value="bus">Bus</option>
+            </select><br>
+<!--            <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" required>-->
 
             <label for="make">Make:</label>
             <input type="text" id="make" name="make" class="form-control" required>
