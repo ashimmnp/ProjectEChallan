@@ -8,6 +8,7 @@ from database import db
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 import traceback
+from datetime import datetime
 
 app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/dataechallan'
@@ -23,7 +24,7 @@ def welcome():
     return render_template('index.html')
 
 
-@app.route('/add-record', methods=['POST'])
+@app.route('/add-record', methods=['GET','POST'])
 def add_record():
     # Redirect to the page where record can be added
     return redirect(url_for('add_record_page'))
@@ -37,12 +38,17 @@ def add_record_page():
 
 @app.route('/adminDB')
 def adminDB():
-    return render_template('adminDB.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    return render_template('adminDB.html', username=username)
 
 
 @app.route('/trafficOfficerDB')
 def trafficOfficerDB():
-    return render_template('trafficOfficerDB.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return render_template('trafficOfficerDB.html', username=session['username'])
 
 
 class users(UserMixin, db.Model):
@@ -74,10 +80,10 @@ def login():
                 print(user.usertype)
                 if user.usertype == 'admin':
                     flash('Admin login successful', 'success')
-                    return redirect(url_for('adminDB'))
+                    return redirect(url_for('adminDB',username=user.username))
                 elif user.usertype == 'officer':
                     flash('Officer login successful', 'success')
-                    return redirect(url_for('trafficOfficerDB'))
+                    return redirect(url_for('trafficOfficerDB', username=user.username))
                 else:
                     flash('Invalid user type', 'error')
                     return redirect(url_for('login'))
@@ -95,6 +101,8 @@ def login():
 
 @app.route('/addUser', methods=['GET', 'POST'])
 def addUser():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         name = request.form['name']
         officer_id = request.form['officer_id']
@@ -135,6 +143,8 @@ def newChallan():
 @app.route('/userManagementPortal', methods=['GET', 'POST'])
 def userManagementPortal():
     # officers = Officer.query.all()
+    if 'username' not in session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         search = request.form['query']
         officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).filter(
@@ -181,6 +191,8 @@ def deleteUser(username):
 
 @app.route('/rulesStructure')
 def rulesStructure():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     rules_category = {}
     rules = rulesAndRegulations.query.all()
     for rule in rules:
@@ -193,6 +205,8 @@ def rulesStructure():
 
 @app.route('/checkRegistration', methods=['GET', 'POST'])
 def checkRegistration():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         regNumber = request.form.get('registrationNumber')
         result = Vehicle.query.filter(func.lower(Vehicle.RegistrationNumber) == regNumber.lower()).first()
@@ -203,35 +217,209 @@ def checkRegistration():
             return render_template('checkRegistration.html', result=None, registrationNumber=regNumber)
     return render_template('checkRegistration.html')
 
+
 @app.route('/checkLicense', methods=['GET', 'POST'])
 def checkLicense():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         licenseId = request.form.get('licenseNumber')
         result = licencesData.query.filter(func.lower(licencesData.licenseId) == licenseId.lower()).first()
-        print(result)
         if result:
-            return render_template('checkRegistration.html', result=result, licenseNumber=regNumber)
+            issued = result.dateIssued
+            expire = result.expirationDate
+            current_date = datetime.now().date()
+            if issued <= current_date <= expire:
+                status = 'Active'
+            else:
+                status = 'Expired'
+            return render_template('checkRegistration.html', result=result, licenseNumber=licenseId, status=status)
         else:
-            return render_template('checkRegistration.html', result=None, licenseNumber=regNumber)
+            return render_template('checkRegistration.html', result=None, licenseNumber=licenseId)
     return render_template('checkRegistration.html')
 
 
-@app.route('/vehicleDetailAdd')
+@app.route('/vehicleDetailAdd', methods=['GET', 'POST'])
 def vehicleDetailAdd():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        try:
+            vehicle_id = request.form.get('vehicle_id')
+            vehicle_type = request.form.get('vehicle_type')
+            make = request.form.get('make')
+            chassis_number = request.form.get('chassis_number')
+            engine_number = request.form.get('engine_number')
+            registration_id = request.form.get('registration_id')
+            registration_number = request.form.get('registration_number')
+            registration_date = request.form.get('registration_date')
+            vehicle_category = request.form.get('vehicle_category')
+            vehicle_model = request.form.get('vehicle_model')
+            vehicle_custom_tax_id = request.form.get('vehicle_custom_tax_id')
+
+            # Update configuration data in the database
+            configuration = Vehicle(
+                vehicleId=vehicle_id,
+                vehicleType=vehicle_type,
+                vehicleMake=make,
+                ChasisNumber=chassis_number,
+                EngineNumber=engine_number,
+                RegistrationId=registration_id,
+                RegistrationNumber=registration_number,
+                registrationdate=registration_date,
+                VehicleCategory=vehicle_category,
+                VehicleModel=vehicle_model,
+                VehicleCustomtaxId=vehicle_custom_tax_id
+            )
+            db.session.add(configuration)
+            db.session.commit()
+            flash('Configuration updated successfully', 'success')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'error')
+
+            return redirect(url_for('vehicleDetailAdd'))
+        else:
+            return render_template('vehicleDetailAdd.html')
     return render_template('vehicleDetailAdd.html')
 
 
-@app.route('/registrationDetailAdd')
+@app.route('/registrationDetailAdd', methods=['GET', 'POST'])
 def registrationDetailAdd():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        try:
+            registration_number = request.form.get('registration_number')
+            vehicle_id = request.form.get('vehicle_id')
+            citizen_id = request.form.get('citizen_id')
+            license_id = request.form.get('license_id')
+            name = request.form.get('name')
+            registration_expired = request.form.get('registration_expired')
+
+            registration_expired_date = datetime.strptime(registration_expired, '%Y-%m-%d').date()
+            current_date = datetime.now().date()
+
+            if registration_expired_date < current_date:
+                registration_status = 'Expired'
+            else:
+                registration_status = 'Active'
+            # Update registration data in the database
+            ownerRegistration = VehicleOwner(
+                registrationNumber=registration_number,
+                vehicleid=vehicle_id,
+                citizenId=citizen_id,
+                licenseId=license_id,
+                Name=name,
+                RegistrationExp=registration_expired,
+                RegistrationStatus=registration_status
+            )
+            db.session.add(ownerRegistration)
+            db.session.commit()
+            flash('Registration completed successfully', 'success')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'error')
+
+        return redirect(url_for('registrationDetailAdd'))  # Redirect to home page after registration
+    else:
+        return render_template('registrationDetailAdd.html')
     return render_template('registrationDetailAdd.html')
+
 
 @app.route('/issueChallan')
 def issueChallan():
     return render_template('issueChallan.html')
 
-@app.route('/userProfile')
+
+@app.route('/userProfile', methods = ['GET', 'POST'])
 def userProfile():
-    return render_template('userProfile.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    sessionUser = Users.query.filter_by(username=session['username']).first()
+    usersName = sessionUser.name
+    sessionUserUName = sessionUser.username
+    usersType = sessionUser.usertype
+
+    if request.method == 'POST':
+        username = session['username']
+        current_password = request.form.get('current-password')
+        new_password = request.form.get('new-password')
+        confirm_password = request.form.get('confirm-password')
+
+        user = Users.query.filter_by(username=username).first()
+        if user:
+            if user.password == current_password:
+                if new_password == confirm_password:
+                    user.password = new_password
+                    db.session.commit()
+                    flash('Password updated successfully', 'success')
+                else:
+                    flash('New password and confirm password do not match', 'error')
+            else:
+                flash('Current password is incorrect', 'error')
+        else:
+            flash('Username not found', 'error')
+
+        return redirect(url_for('userProfile'))
+
+    return render_template('userProfile.html', name=usersName, usersType=usersType, username=sessionUserUName)
+
+
+@app.route('/rulesPortal', methods=['GET', 'POST'])
+def rulesPortal():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        if request.form.get('action') == 'add':
+            rule_id = request.form.get('rule_id')
+            rule_category = request.form.get('rule_category')
+            rule_desc = request.form.get('rule_desc')
+
+            try:
+                rule = rulesAndRegulations(rulesId=rule_id, rulecategory=rule_category, ruleDesc=rule_desc)
+                db.session.add(rule)
+                db.session.commit()
+                flash('Rule added successfully', 'success')
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'error')
+
+        elif request.form.get('action') == 'edit':
+            rule_id = request.form.get('edit_rule_id')
+            rule = rulesAndRegulations.query.filter_by(rulesId=rule_id).first()
+            if rule:
+                rule.rulecategory = request.form.get('edit_rule_category')
+                rule.ruleDesc = request.form.get('edit_rule_desc')
+
+                try:
+                    db.session.commit()
+                    flash('Rule updated successfully', 'success')
+                except Exception as e:
+                    flash(f'An error occurred: {str(e)}', 'error')
+            else:
+                flash('Rule not found', 'error')
+
+        elif request.form.get('action') == 'delete':
+            rule_id = request.form.get('delete_rule_id')
+            rule = rulesAndRegulations.query.filter_by(rulesId=rule_id).first()
+            if rule:
+                try:
+                    db.session.delete(rule)
+                    db.session.commit()
+                    flash('Rule deleted successfully', 'success')
+                except Exception as e:
+                    flash(f'An error occurred: {str(e)}', 'error')
+            else:
+                flash('Rule not found', 'error')
+
+        return redirect(url_for('rulesPortal'))
+
+    else:
+        rules = rulesAndRegulations.query.all()
+        return render_template('rulesPortal.html', rules=rules)
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_password():
@@ -262,3 +450,4 @@ def change_password():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
