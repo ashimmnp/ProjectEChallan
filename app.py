@@ -77,7 +77,7 @@ def login():
             if user and user.password == password:
                 session['username'] = user.username
                 session['usertype'] = user.usertype
-                print(user.usertype)
+                # print(user.usertype)
                 if user.usertype == 'admin':
                     flash('Admin login successful', 'success')
                     return redirect(url_for('adminDB',username=user.username))

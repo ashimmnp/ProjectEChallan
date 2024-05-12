@@ -9,49 +9,70 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: white;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px; /* Adjust the max-width as needed */
-            padding: 0 20px; /* Add padding to create gaps on left and right sides */
+        .navbar {
+            margin-top: 0px;
+            padding: 0px 20px;
+            cursor: pointer;
+        }
+
+        .navbar-logo h1 {
+            font-size: 30px; /* Set font size */
+            color: #4169e1; /* Set text color */
+            font-weight: bold; /* Make text bold */
+            white-space: nowrap; /* Prevent line break */
+        }
+
+        .hr-blurry {
+            border: none;
+            height: 4px; /* Adjust height as needed */
+            background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+            margin: 2px 0; /* Add some margin for spacing */
         }
 
         h2 {
             margin-bottom: 20px;
             text-align: center;
             font-size: 24px;
+            font-weight: bold;
         }
 
         form {
+            max-width: 800px; /* Increased max-width */
+            margin: 20px auto;
+            padding: 20px;
             background-color: #fff;
-            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         label {
             display: block;
             margin-bottom: 15px;
             font-size: 18px;
+            font-weight: bold;
         }
 
-        input[type="text"],
-        input[type="number"],
-        input[type="date"] {
-            width: 100%;
-            padding: 15px;
+        .mb-3 {
             margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+            color: #555;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
         }
 
         button[type="submit"] {
@@ -63,62 +84,76 @@
             cursor: pointer;
             font-size: 18px;
             width: 100%;
+            transition: background-color 0.3s ease;
         }
 
         button[type="submit"]:hover {
-            background-color: rgb(36, 67, 158);
-        }
-
-        .center {
-            text-align: center;
+             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
     </style>
+        <script src="https://kit.fontawesome.com/0f9c074925.js" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-9/1xGhlZGCr4HAA3ZbxObPpXM87W2KxZJLFrQ+UdqF7jKpq+ZJoa2P+aXmI9gfkB" crossorigin="anonymous">
+
 </head>
 <body>
-
-        <form action="/registrationDetailAdd" method="POST">
-            <h2>Add Registration Details</h2>
-            <div class="container">
-        {% with message = get_flashed_messages() %}
-    {% if message %}
-        <div id="diagonal-message" class="diagonal-message">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card text-white bg-info mb-3">
-                            <div class="card-header"></div>
-                            <div class="card-body">
-                                <p class="card-text">{{ message[0] }}</p>
-                                <button class="btn btn-light" onclick="window.location.reload()">OK</button>
+<header>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <h1><i class="fas fa-car"></i> Challan System</h1>
+        </div>
+    </div>
+    <hr class="hr hr-blurry" />
+</header>
+    <form action="/registrationDetailAdd" method="POST">
+        <h2>Add Registration Details</h2>
+        <div class="container">
+            {% with message = get_flashed_messages() %}
+                {% if message %}
+                    <div id="diagonal-message" class="diagonal-message">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="card text-white bg-info mb-3">
+                                        <div class="card-header"></div>
+                                        <div class="card-body">
+                                            <p class="card-text">{{ message[0] }}</p>
+                                            <button class="btn btn-light" onclick="window.location.reload()">OK</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                <label for="registration_number">Registration Number:</label>
+                <input type="text" id="registration_number" name="registration_number" class="form-control" required>
             </div>
-        </div>
-    {% endif %}
-{% endwith %}
-            <label for="registration_number">Registration Number:</label>
-            <input type="text" id="registration_number" name="registration_number" class="form-control" required>
-
-            <label for="vehicle_id">Vehicle ID:</label>
-            <input type="text" id="vehicle_id" name="vehicle_id" class="form-control" required>
-
-            <label for="citizen_id">Citizen ID:</label>
-            <input type="text" id="citizen_id" name="citizen_id" class="form-control" required>
-
-            <label for="license_id">License ID:</label>
-            <input type="text" id="license_id" name="license_id" class="form-control" required>
-
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
-
-            <label for="registration_expired">Registration Expired:</label>
-            <input type="date" id="registration_expired" name="registration_expired" class="form-control" required>
-
+            <div class="mb-3">
+                <label for="vehicle_id">Vehicle ID:</label>
+                <input type="text" id="vehicle_id" name="vehicle_id" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="citizen_id">Citizen ID:</label>
+                <input type="text" id="citizen_id" name="citizen_id" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="license_id">License ID:</label>
+                <input type="text" id="license_id" name="license_id" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="registration_expired">Registration Expired:</label>
+                <input type="date" id="registration_expired" name="registration_expired" class="form-control" required>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
+        </div>
+    </form>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

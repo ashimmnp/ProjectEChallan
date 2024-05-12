@@ -10,50 +10,131 @@
             font-family: Arial, sans-serif;
             margin: 20px;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: white;
         }
+                .navbar {
+            margin-top: 0px;
+            padding: 0px 20px;
+            cursor: pointer;
+
+        }
+           .navbar-logo h1 {
+    font-size: 30px; /* Set font size */
+    color: #4169e1; /* Set text color */
+    font-weight: bold; /* Make text bold */
+    white-space: nowrap; /* Prevent line break */
+}
+   .hr-blurry {
+
+    border: none;
+    height: 2px; /* Adjust height as needed */
+    background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+    margin: 2px 0; /* Add some margin for spacing */
+}
         .container {
             max-width: 500px;
-            margin: 0 auto;
-            background-color: #fff;
+            margin: 20px auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: transparent;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         h2 {
             text-align: center;
             margin-top: 0;
             color: var(--primary-color);
         }
-        form {
-            margin-top: 20px;
+        .form-label {
+        color: #333; /* Set label text color */
+        font-weight: bold; /* Set label font weight */
+    }
+    .mb-3{
+        margin: 15px;
+    }
+    /* Style for the input field */
+    .form-control {
+        width: 100%; /* Set input field width to fill container */
+        padding: 10px; /* Add padding */
+        border: 1px solid #ccc; /* Add border */
+        border-radius: 5px; /* Add border radius */
+        font-size: 16px; /* Set font size */
+        color: #555; /* Set text color */
+        box-sizing: border-box; /* Ensure padding is included in width */
+    }
+
+    /* Style for the input field when focused */
+    .form-control:focus {
+        border-color: #007bff; /* Change border color on focus */
+    }
+
+                .form-select {
+                    margin-bottom: 10px;
+        width: 100%; /* Set width to fill container */
+        padding: 12px; /* Add padding */
+        border: 1px solid #ccc; /* Add border */
+        border-radius: 5px; /* Add border radius */
+        font-size: 16px; /* Set font size */
+        color: #555; /* Set text color */
+        background-color: #fff; /* Set background color */
+        appearance: none; /* Remove default appearance */
+        -webkit-appearance: none; /* Remove default appearance for webkit browsers */
+        -moz-appearance: none; /* Remove default appearance for firefox */
+        cursor: pointer; /* Show pointer cursor */
+        box-sizing: border-box; /* Ensure padding is included in width */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23555555"><path d="M7 10l5 5 5-5H7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Inline SVG as background image */
+        background-repeat: no-repeat; /* Prevent background image from repeating */
+        background-position: right 10px center; /* Position background image */
+    }
+
+    /* Style for the dropdown arrow */
+    .form-select::after {
+        content: '\25BC'; /* Unicode for down arrow */
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        pointer-events: none; /* Ensure arrow does not affect click events */
+    }
+
+    /* Style for the select dropdown when focused */
+    .form-select:focus {
+        border-color: #007bff; /* Change border color on focus */
+    }
+    button {
+        margin:15px;
+        background-color: royalblue;
+        color: #fff;
+        padding: 10px;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        width: 94%;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease;
+    }
+        button:hover{
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        label {
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: royalblue;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-        }
+       #createChallan {
+        padding: 10px;
+    }
     </style>
+    <script src="https://kit.fontawesome.com/0f9c074925.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-9/1xGhlZGCr4HAA3ZbxObPpXM87W2KxZJLFrQ+UdqF7jKpq+ZJoa2P+aXmI9gfkB" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
+<header>
+    <div class="navbar">
 
+            <div class="navbar-logo">
+                <h1><i class="fas fa-car"></i> Challan System</h1>
+
+        </div>
+    </div>
+    <hr class="hr hr-blurry" />
+</header>
+    <div class="container">
          <h2>New Challan</h2>
     <form action="#" method="post" id="createChallan">
         <div class="mb-3">
@@ -79,10 +160,12 @@
          <div class="mb-3">
              <label for="violation" class="form-label">Violation:</label> <a href="rulesStructure" target="_blank"><label> Review Rule</label></a>
             <select class="form-select" id="violationCategory" name="violationCategory" required>
+                <option value="" selected disabled>Select Category</option>
                 <option value="admin">Category A</option>
                 <option value="officer">Category B</option>
             </select>
              <select class="form-select" id="violationReason" name="violationReason" required>
+                 <option value="" selected disabled>Select</option>
                 <option value="admin">A-2</option>
                 <option value="officer">B-1</option>
             </select>

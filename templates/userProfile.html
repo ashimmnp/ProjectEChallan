@@ -14,10 +14,29 @@
     margin: 0;
     padding: 0;
 }
+                  .navbar {
+            margin-top: 0px;
+            padding: 0px 20px;
+            cursor: pointer;
+
+        }
+           .navbar-logo h1 {
+    font-size: 30px; /* Set font size */
+    color: #4169e1; /* Set text color */
+    font-weight: bold; /* Make text bold */
+    white-space: nowrap; /* Prevent line break */
+}
+   .hr-blurry {
+
+       border: none;
+       height: 2px; /* Adjust height as needed */
+       background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+       margin-bottom: 40px;
+   }
 .container {
 
     max-width: 700px;
-    margin: 50px auto;
+    margin: 10px auto;
     padding: 20px;
 }
 
@@ -326,8 +345,19 @@ input[type="password"] {
 
 
 </style>
+ <script src="https://kit.fontawesome.com/0f9c074925.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-9/1xGhlZGCr4HAA3ZbxObPpXM87W2KxZJLFrQ+UdqF7jKpq+ZJoa2P+aXmI9gfkB" crossorigin="anonymous">
 <body>
+<header>
+    <div class="navbar">
 
+            <div class="navbar-logo" onclick="window.location.href='/trafficOfficerDB'">
+                <h1><i class="fas fa-car"></i> Challan System</h1>
+
+        </div>
+    </div>
+    <hr class="hr hr-blurry" />
+</header>
 <div class="container">
     <div class="profile">
         <div class="profile-header">
