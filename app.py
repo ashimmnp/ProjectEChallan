@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, abort, session
+from flask import Flask, request, render_template, redirect, url_for, flash, abort, session, jsonify
 from flask_login import UserMixin, login_user
 from models import *
 import secrets
@@ -24,17 +24,66 @@ def welcome():
     return render_template('index.html')
 
 
-@app.route('/add-record', methods=['GET','POST'])
-def add_record():
-    # Redirect to the page where record can be added
-    return redirect(url_for('add_record_page'))
 
 
-@app.route('/add-record-page')
-def add_record_page():
+@app.route('/issueNewChallan', methods=['GET', 'POST'])
+def issueNewChallan():
     # Render the template for adding a record
-    return render_template('newChallan.html')
+    username = session.get('username')
+    categories = rulesAndRegulations.query.distinct(rulesAndRegulations.rulecategory).all()
+    rules = rulesAndRegulations.query.all()
+    rules_data = [
+        {'id': rule.rulesId, 'rulecategory': rule.rulecategory, 'ruleDesc': rule.ruleDesc}
+        for rule in rules
+    ]
+    if request.method == 'POST':
+        name = request.form['name']
+        location = request.form['location']
+        registration_number = request.form['registration_number']
+        license_number = request.form['license_number']
+        violation_id = int(request.form['violation_id'])
 
+        rule = rulesAndRegulations.query.filter_by(rulesId=violation_id).first()
+        previous_history = challanhistory.query.filter_by(
+            registrationNumber=registration_number,
+            licenseNumber=license_number,
+            violationId=violation_id
+        ).order_by(challanhistory.dateIssued.desc()).first()
+        if previous_history and previous_history.violationCount >= rule.penaltyChance:
+            flash('License is suspended due to repeated violations.', 'error')
+            return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
+
+        violation_count = previous_history.violationCount + 1 if previous_history else 1
+        new_penalty = rule.fineStart * violation_count
+
+        new_history = challanhistory(
+            challanNumber='CHL{}'.format(challanhistory.query.count() + 1),
+            registrationNumber=registration_number,
+            licenseNumber=license_number,
+            violationReason=rule.ruleDesc,
+            violationId=violation_id,
+            chargedAmount=new_penalty,
+            issuedLocation=location,
+            issuedBy=username,  # This could be dynamic based on logged-in user
+            violationCount=violation_count
+        )
+        db.session.add(new_history)
+        history_id = new_history.challannumber
+        db.session.commit()
+
+        if history_id:
+            return jsonify({'success':True, 'history_id': history_id})
+
+        flash('Challan issued successfully!', 'success')
+        return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
+
+
+    return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
+
+@app.route('/challan-details/<int:history_id>')
+def challan_details(history_id):
+    history = challanhistory.query.get_or_404(history_id)
+    return render_template('issueChallan.html', history=history)
 
 @app.route('/adminDB')
 def adminDB():
@@ -191,8 +240,6 @@ def deleteUser(username):
 
 @app.route('/rulesStructure')
 def rulesStructure():
-    if 'username' not in session:
-        return redirect(url_for('login'))
     rules_category = {}
     rules = rulesAndRegulations.query.all()
     for rule in rules:
@@ -372,10 +419,12 @@ def rulesPortal():
         if request.form.get('action') == 'add':
             rule_id = request.form.get('rule_id')
             rule_category = request.form.get('rule_category')
+            fine_start = request.form.get('finestart')
+            penalty_chance = request.form.get('penaltyChances')
             rule_desc = request.form.get('rule_desc')
 
             try:
-                rule = rulesAndRegulations(rulesId=rule_id, rulecategory=rule_category, ruleDesc=rule_desc)
+                rule = rulesAndRegulations(rulesId=rule_id, rulecategory=rule_category,fineStart=fine_start, penaltyChance=penalty_chance, ruleDesc=rule_desc)
                 db.session.add(rule)
                 db.session.commit()
                 flash('Rule added successfully', 'success')
@@ -388,6 +437,8 @@ def rulesPortal():
             if rule:
                 rule.rulecategory = request.form.get('edit_rule_category')
                 rule.ruleDesc = request.form.get('edit_rule_desc')
+                rule.fineStart = request.form.get('finechange')
+                rule.penaltyChance = request.form.get('penaltyChange')
 
                 try:
                     db.session.commit()

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 095d5d77c1f1
+Revision ID: a108e9cf2c67
 Revises: 
-Create Date: 2024-05-07 20:18:30.418715
+Create Date: 2024-05-12 19:16:44.925027
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '095d5d77c1f1'
+revision = 'a108e9cf2c67'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,7 @@ def upgrade():
     sa.Column('licenseId', sa.String(length=255), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=True),
     sa.Column('address', sa.String(length=255), nullable=True),
+    sa.Column('citizenId', sa.String(length=255), nullable=True),
     sa.Column('dateIssued', sa.Date(), nullable=True),
     sa.Column('fatherName', sa.String(length=255), nullable=True),
     sa.Column('dateofBirth', sa.Date(), nullable=True),
@@ -40,6 +41,8 @@ def upgrade():
     op.create_table('rulesAndRegulations',
     sa.Column('rulesId', sa.String(length=255), nullable=False),
     sa.Column('rulecategory', sa.String(length=255), nullable=True),
+    sa.Column('fineStart', sa.Integer(), nullable=True),
+    sa.Column('penaltyChance', sa.Integer(), nullable=True),
     sa.Column('ruleDesc', sa.String(length=225), nullable=True),
     sa.PrimaryKeyConstraint('rulesId')
     )
@@ -77,13 +80,16 @@ def upgrade():
     sa.PrimaryKeyConstraint('registrationNumber')
     )
     op.create_table('challanhistory',
-    sa.Column('challannumber', sa.String(length=255), nullable=False),
+    sa.Column('challannumber', sa.Integer(), nullable=False, auto_increment=True),
     sa.Column('registrationNumber', sa.String(length=255), nullable=True),
+    sa.Column('licenseNumber', sa.String(length=255), nullable=True),
     sa.Column('violationReason', sa.String(length=255), nullable=True),
     sa.Column('violationId', sa.String(length=255), nullable=True),
     sa.Column('chargedAmount', sa.Numeric(precision=10, scale=2), nullable=True),
     sa.Column('dateIssued', sa.Date(), nullable=True),
     sa.Column('issuedLocation', sa.String(length=255), nullable=True),
+    sa.Column('issuedBy', sa.String(length=255), nullable=True),
+    sa.Column('violationCount', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['registrationNumber'], ['vehicleowner.registrationNumber'], ),
     sa.PrimaryKeyConstraint('challannumber')
     )

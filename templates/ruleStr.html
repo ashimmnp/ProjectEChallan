@@ -58,11 +58,13 @@ th {
         <tr>
             <th>Rules Id</th>
             <th>Rule</th>
+            <th>Fine(Rs.)</th>
         </tr>
         {% for rule in rules %}
             <tr>
                 <td>{{ rule.rulesId }}</td>
                 <td>{{ rule.ruleDesc }}</td>
+                <td>{{ rule.fineStart }}</td>
             </tr>
         {%  endfor %}
     </table>

@@ -32,6 +32,8 @@
                     <th>Rule ID</th>
                     <th>Rule Category</th>
                     <th>Rule Description</th>
+                    <th>Fine Amount</th>
+                    <th>Penalty Chances</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -41,6 +43,8 @@
                         <td>{{ rule.rulesId }}</td>
                         <td>{{ rule.rulecategory }}</td>
                         <td>{{ rule.ruleDesc }}</td>
+                        <td>{{ rule.fineStart }}</td>
+                        <td>{{ rule.penaltyChance}}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editRuleModal{{ loop.index }}">Edit</button>
                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteRuleModal{{ loop.index }}">Delete</button>
@@ -70,7 +74,32 @@
                         </div>
                         <div class="form-group">
                             <label for="rule_category">Rule Category</label>
-                            <input type="text" class="form-control" id="rule_category" name="rule_category" required>
+                            <input type="text" class="form-control" id="rule_category" name="rule_category" value="Category-#" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fine_start">Fine Start Amount</label>
+                            <select class="form-control" id="fine_start" name="finestart" required>
+                                <option value="500">500</option>
+                                <option value=1000">1000</option>
+                                <option value=1500">1500</option>
+                                <option value=2000">2000</option>
+                                <option value=2500">2500</option>
+                                <option value=3000">3000</option>
+                                <option value=4000">4000</option>
+                                <option value=5000">5000</option>
+                                <option value=10000">10000</option>
+                                <option value=15000">15000</option>
+                                <option value=20000">20000</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="penaltyChances">Penalty Chances Count</label>
+                            <select class="form-control" id="penaltyChances" name="penaltyChances" required>
+                                 <option value="2">2</option>
+                                 <option value="3">3</option>
+                                 <option value="4">4</option>
+                                 <option value="5">5</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="rule_desc">Rule Description</label>
@@ -106,6 +135,31 @@
                                 <label for="edit_rule_desc">Rule Description</label>
                                 <input type="text" class="form-control" id="edit_rule_desc" name="edit_rule_desc" value="{{ rule.ruleDesc }}" required>
                             </div>
+                            <div class="form-group">
+                            <label for="fine_change">Fine Start Amount</label>
+                            <select class="form-control" id="fine_change" name="finechange" required>
+                                <option value="500">500</option>
+                                <option value=1000">1000</option>
+                                <option value=1500">1500</option>
+                                <option value=2000">2000</option>
+                                <option value=2500">2500</option>
+                                <option value=3000">3000</option>
+                                <option value=4000">4000</option>
+                                <option value=5000">5000</option>
+                                <option value=10000">10000</option>
+                                <option value=15000">15000</option>
+                                <option value=20000">20000</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="penaltyChange">Penalty Chances Count</label>
+                            <select class="form-control" id="penaltyChange" name="penaltyChange" required>
+                                 <option value="2">2</option>
+                                 <option value="3">3</option>
+                                 <option value="4">4</option>
+                                 <option value="5">5</option>
+                            </select>
+                        </div>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </form>
                     </div>

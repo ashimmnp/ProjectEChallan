@@ -6,13 +6,16 @@ from datetime import datetime
 class ChallanHistory(db.Model):
     __tablename__ = 'challanhistory'
 
-    challannumber = db.Column(db.String(255), primary_key=True)
+    challannumber = db.Column(db.Integer, primary_key=True, autoincrement=True)
     registrationNumber = db.Column(db.String(255), db.ForeignKey('vehicleowner.registrationNumber'))
+    licenseNumber = db.Column(db.String(255))
     violationReason = db.Column(db.String(255))
     violationId = db.Column(db.String(255))
     chargedAmount = db.Column(db.Numeric(10, 2))
     dateIssued = db.Column(db.Date)
     issuedLocation = db.Column(db.String(255))
+    issuedBy = db.Column(db.String(255))
+    violationCount = db.Column(db.Integer)
 
 class Officer(db.Model):
     __tablename__ = 'officer'
@@ -68,6 +71,7 @@ class licencesData(db.Model):
     licenseId = db.Column(db.String(255), primary_key=True)
     name = db.Column(db.String(255))
     address = db.Column(db.String(255))
+    citizenId = db.Column(db.String(255))
     dateIssued = db.Column(db.Date)
     fatherName = db.Column(db.String(255))
     dateofBirth = db.Column(db.Date)
@@ -86,5 +90,7 @@ class rulesAndRegulations(db.Model):
 
     rulesId = db.Column(db.String(255), primary_key=True)
     rulecategory = db.Column(db.String(255))
+    fineStart = db.Column(db.Integer)
+    penaltyChance = db.Column(db.Integer)
     ruleDesc = db.Column(db.String(225))
 
