@@ -55,6 +55,15 @@
     <div class="container">
 
          <h2>New Challan</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     <form action="/issueNewChallan" method="post" id="createChallan" target="_blank">
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
@@ -91,49 +100,24 @@
 
     </div>
 <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const categorySelect = document.getElementById('category');
-            const violationSelect = document.getElementById('violation_id');
-            const rules = {{ rules|tojson }};
 
-            categorySelect.addEventListener('change', function() {
-                const selectedCategory = this.value;
-                // Clear existing options
-                violationSelect.innerHTML = '';
-                // Add new options that match the category
-                rules.forEach(function(rule) {
-                    if (rule.rulecategory === selectedCategory) {
-                        const option = new Option(rule.ruleDesc, rule.id);
-                        violationSelect.appendChild(option);
-                    }
-                });
-                // Trigger change to populate on first load if needed
-                if (violationSelect.options.length > 0) {
-                    violationSelect.value = violationSelect.options[0].value;
-                }
-            });
-            // Initial population of violation IDs on load
-            if (categorySelect.options.length > 0) {
-                categorySelect.dispatchEvent(new Event('change'));
-            }
-        });
-
-          document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(form);
-        fetch('/submit-challan', {
+        fetch('/issueNewChallan', {
             method: 'POST',
             body: formData
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
                 // Open a new tab with the challan details
-                window.open('/challan-details/' + data.history_id, '_blank');
+                window.open('/issuedChallan/' + data.history_id+'/'+data.reasons, '_blank');
+                console.log(data.history_id)
                 // Optionally clear the form or show a success message on the current page
                 form.reset();
-                alert('Challan issued successfully and details opened in a new tab.');
+                // alert('Challan issued successfully and details opened in a new tab.');
             } else {
                 alert('Failed to issue challan. Please try again.');
             }
@@ -144,6 +128,5 @@
     });
 });
     </script>
-
 </body>
 </html>

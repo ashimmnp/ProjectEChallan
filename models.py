@@ -6,8 +6,9 @@ from datetime import datetime
 class ChallanHistory(db.Model):
     __tablename__ = 'challanhistory'
 
-    challannumber = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    challannumber = db.Column(db.String(255), primary_key=True)
     registrationNumber = db.Column(db.String(255), db.ForeignKey('vehicleowner.registrationNumber'))
+    driverName = db.Column(db.String(255))
     licenseNumber = db.Column(db.String(255))
     violationReason = db.Column(db.String(255))
     violationId = db.Column(db.String(255))

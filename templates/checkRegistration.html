@@ -92,15 +92,15 @@
             <p><b>Issued Date:</b> {{ result.dateIssued }}</p>
             <p><b>Expiration Date:</b> {{ result.expirationDate }}</p>
         </div>
-        <form action="/add-record" method="get">
+        <form action="/issuingChallan" method="get">
             <input type="text" id="licenseId" name="licenseId" value="{{result.licenseId}}">
-        <button type="submit">Create Challan</button>
+        <button onclick="window.location.href='/issueNewChallan'">Create Challan</button>
     </form>
         {% else %}
         <p class="text-center">No record found {{ registrationNumber }}</p>
-            <form action="/add-record" method="post">
-        <button type="submit">Create Challan</button>
-    </form>
+
+        <button onclick="window.location.href='/issueNewChallan'">Create Challan</button>
+
         {% endif %}
     </div>
     <br><br><br>
@@ -126,14 +126,13 @@
             <p><b>Engine Number:</b> {{ result.EngineNumber }}</p>
             <p><b>Vehicle Custom Tac Id:</b> {{ result.VehicleCustomtaxId}}</p>
         </div>
-        <form action="/add-record" method="post">
             <input type="hidden" value="{{result.registrationId}}">
-        <button type="submit" >Create Challan</button>
+        <button onclick="window.location.href='/issueNewChallan'" >Create Challan</button>
     </form>
         {% else %}
         <p class="text-center">No record found {{ registrationNumber }}</p>
-            <form action="/add-record" method="post">
-        <button type="submit">Create Challan</button>
+
+        <button onclick="window.location.href='/issueNewChallan'">Create Challan</button>
     </form>
         {% endif %}
     </div>

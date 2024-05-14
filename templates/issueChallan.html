@@ -3,16 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Challan Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Use full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            width: 60%; /* Adjusted width for better focus */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+        p {
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        .button {
+            position: absolute;
+            right: 30px; /* Adjusted position for better alignment */
+            top: 30px;
+        }
+        button {
+            background-color: royalblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Challan Details</h1>
-    <p>Challan Number: {{ history.challanNumber }}</p>
-    <p>Registration Number: {{ history.registrationNumber }}</p>
-    <p>License Number: {{ history.licenseNumber }}</p>
-    <p>Violation Reason: {{ history.violationReason }}</p>
-    <p>Charged Amount: {{ history.chargedAmount }}</p>
-    <p>Date Issued: {{ history.dateIssued }}</p>
-    <p>Issued Location: {{ history.issuedLocation }}</p>
-    <p>Issued By: {{ history.issuedBy }}</p>
+
+    <div class="container">
+        <div class="button">
+            <button onclick="window.print()">Print</button>
+        </div>
+        <h2>Challan for {{history.driverName}}</h2>
+
+        <p><b>Driver's Name:</b> {{ history.driverName }}</p>
+        <p><b>Challan Number:</b> {{ history.challannumber }}</p>
+        <p><b>Registration Number:</b> {{ history.registrationNumber }}</p>
+        <p><b>License Number:</b> {{ history.licenseNumber }}</p>
+        <p><b>Violation Reason:</b> {{ history.violationReason }}</p>
+        <p><b>Charged Amount:</b> {{ history.chargedAmount }}</p>
+        <p><b>Date Issued:</b> {{ history.dateIssued }}</p>
+        <p><b>Issued Location:</b> {{ history.issuedLocation }}</p>
+        <p><b>Additional Message:</b> {{reasons}}</p>
+        <p><b>Penalty Chance:</b> {{history.violationCount}}</p>
+        <p><b>Issued By:</b> {{ history.issuedBy }}</p>
+    </div>
+
 </body>
 </html>

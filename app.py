@@ -25,65 +25,87 @@ def welcome():
 
 
 
-
 @app.route('/issueNewChallan', methods=['GET', 'POST'])
 def issueNewChallan():
     # Render the template for adding a record
     username = session.get('username')
+    if 'username' not in session:
+        return redirect(url_for('login'))
     categories = rulesAndRegulations.query.distinct(rulesAndRegulations.rulecategory).all()
     rules = rulesAndRegulations.query.all()
     rules_data = [
         {'id': rule.rulesId, 'rulecategory': rule.rulecategory, 'ruleDesc': rule.ruleDesc}
         for rule in rules
     ]
+
     if request.method == 'POST':
-        name = request.form['name']
-        location = request.form['location']
-        registration_number = request.form['registration_number']
-        license_number = request.form['license_number']
-        violation_id = int(request.form['violation_id'])
+        try:
+            name = request.form['name']
+            location = request.form['location']
+            registration_number = request.form['registrationNumber']
+            license_number = request.form['licenceId']
+            violation_id = request.form['violationReason']
+            print(name)
+            print(violation_id)
+            reason = '-'
 
-        rule = rulesAndRegulations.query.filter_by(rulesId=violation_id).first()
-        previous_history = challanhistory.query.filter_by(
-            registrationNumber=registration_number,
-            licenseNumber=license_number,
-            violationId=violation_id
-        ).order_by(challanhistory.dateIssued.desc()).first()
-        if previous_history and previous_history.violationCount >= rule.penaltyChance:
-            flash('License is suspended due to repeated violations.', 'error')
-            return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
+            rule = rulesAndRegulations.query.filter_by(rulesId=violation_id).first()
+            print(name)
+            print(violation_id)
 
-        violation_count = previous_history.violationCount + 1 if previous_history else 1
-        new_penalty = rule.fineStart * violation_count
+            previous_history = ChallanHistory.query.filter_by(
+                registrationNumber=registration_number,
+                licenseNumber=license_number,
+                violationId=violation_id
+            ).order_by(ChallanHistory.dateIssued.desc()).first()
+            if previous_history and previous_history.violationCount >= rule.penaltyChance:
+                reason = 'License is suspended due to maximum number of violations'
+                flash('License is suspended due to repeated violations.', 'error')
+                # return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
+            print(previous_history)
+            violation_count = previous_history.violationCount + 1 if previous_history else 1
+            new_penalty = rule.fineStart * violation_count
 
-        new_history = challanhistory(
-            challanNumber='CHL{}'.format(challanhistory.query.count() + 1),
-            registrationNumber=registration_number,
-            licenseNumber=license_number,
-            violationReason=rule.ruleDesc,
-            violationId=violation_id,
-            chargedAmount=new_penalty,
-            issuedLocation=location,
-            issuedBy=username,  # This could be dynamic based on logged-in user
-            violationCount=violation_count
-        )
-        db.session.add(new_history)
-        history_id = new_history.challannumber
-        db.session.commit()
+            new_history = ChallanHistory(
+                challannumber='CHL{}'.format(ChallanHistory.query.count() + 1),
+                registrationNumber=registration_number,
+                driverName = name,
+                licenseNumber=license_number,
+                violationReason=rule.ruleDesc,
+                violationId=violation_id,
+                chargedAmount=new_penalty,
+                dateIssued = datetime.today(),
+                issuedLocation=location,
+                issuedBy=username,  # This could be dynamic based on logged-in user
+                violationCount=violation_count
 
-        if history_id:
-            return jsonify({'success':True, 'history_id': history_id})
+            )
+            db.session.add(new_history)
+            history_id = new_history.challannumber
+            print(history_id)
+            ChallanHistory.query.order_by(ChallanHistory.dateIssued.desc()).all()
+            db.session.commit()
+            print(reason)
+            flash('Challan issued successfully!', 'success')
+            return jsonify({'success': True, 'history_id': history_id, 'reasons': reason})
+        except Exception as e:
+            flash(str(e), 'error')
+            app.logger.error(e)
+            response = {
+                "error": str(e),
+                "traceback": traceback.format_exc().splitlines()
+            }
+            return jsonify(response), 500
 
-        flash('Challan issued successfully!', 'success')
+
         return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
-
 
     return render_template('newChallan.html', username=username,categories = categories, rules=rules_data)
 
-@app.route('/challan-details/<int:history_id>')
-def challan_details(history_id):
-    history = challanhistory.query.get_or_404(history_id)
-    return render_template('issueChallan.html', history=history)
+@app.route('/issuedChallan/<history_id>/<reasons>')
+def issuedChallan(history_id, reasons):
+    history = ChallanHistory.query.get_or_404(history_id)
+    return render_template('issueChallan.html', history=history, reasons=reasons)
 
 @app.route('/adminDB')
 def adminDB():
@@ -474,5 +496,6 @@ def logout():
 
 
 if __name__ == '__main__':
+    app.config['DEBUG']=True
     app.run(debug=True)
 
