@@ -494,6 +494,32 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        current_password = request.form.get('current-password')
+        new_password = request.form.get('new-password')
+        confirm_password = request.form.get('confirm-password')
+
+        user = Users.query.filter_by(username=username).first()
+        if user:
+            if user.password == current_password:
+                if new_password == confirm_password:
+                    user.password = new_password
+                    db.session.commit()
+                    flash('Password updated successfully', 'success')
+                else:
+                    flash('New password and confirm password do not match', 'error')
+            else:
+                flash('Current password is incorrect', 'error')
+        else:
+            flash('Username not found', 'error')
+
+        return redirect(url_for('change_password'))
+
+    return render_template('change_password.html')
+
 
 if __name__ == '__main__':
     app.config['DEBUG']=True
