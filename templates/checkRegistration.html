@@ -9,48 +9,82 @@
         :root {
             --primary-color: royalblue;
             --secondary-color: #FF5349;
-            --text-color: black;
+            --text-color: #4169e1;
         }
         body {
-            background-color: #f0f0f0;
+            background-color: white;
             color: var(--text-color);
         }
-        h1 {
-            color: var(--text-color);
-            text-align: center;
+                  .navbar {
+            margin-top: 0px;
+            padding: 0px 20px;
+            cursor: pointer;
+
         }
+           .navbar-logo h1 {
+    font-size: 30px; /* Set font size */
+    color: #4169e1; /* Set text color */
+    font-weight: bold; /* Make text bold */
+    white-space: nowrap; /* Prevent line break */
+}
+   .hr-blurry {
+
+       border: none;
+       height: 2px; /* Adjust height as needed */
+       background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+       margin-bottom: 40px;
+   }
+    .smaller-heading {
+        font-size: 24px; /* Adjust font size */
+        font-weight: bold; /* Add font weight if needed */
+        color: black; /* Set text color */
+        text-align: center; /* Center the text */
+        margin-top: 10px; /* Add margin if needed */
+        margin-bottom: 20px;
+    }
         form {
             margin-bottom: 20px;
         }
-        input[type="text"] {
-            width: 300px;
-            padding: 10px;
-            border: 1px solid var(--primary-color); /* Added border */
-            border-radius: 5px;
-            outline: none; /* Remove input outline */
-            color: var(--text-color);
-        }
-        input[type="text"]:focus {
-            border-color: #4169E1; /* Change border color on focus */
-        }
-        button[type="submit"] {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #4169E1;
-        }
+
+        .form-container {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Style for the input field */
+    input[type="text"] {
+        flex: 1; /* Expand to fill remaining space */
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px 0 0 5px; /* Rounded corners on the left */
+        outline: none;
+        color: black;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    /* Style for the button */
+    button[type="submit"] {
+        padding:11.5px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0 5px 5px 0; /* Rounded corners on the right */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Add hover effect to the button */
+    button[type="submit"]:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0px auto;
             padding: 20px;
-            background-color: transparent; /* Removed background color */
-            border: 1px solid var(--primary-color); /* Added border */
+            background-color: transparent;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .result-container {
             margin-top: 20px;
@@ -69,16 +103,46 @@
         .result-container button:hover {
             background-color: #4169E1;
         }
+        .text-center {
+        text-align: left;
+        color: red; /* Set text color to red */
+    }
+            button[type="submit11"] {
+        padding: 10px 20px;
+        background-color: royalblue; /* Coral color */
+        color: white; /* White text */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Show pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    button[type="submit11"]:hover {
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
     </style>
+     <script src="https://kit.fontawesome.com/0f9c074925.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-9/1xGhlZGCr4HAA3ZbxObPpXM87W2KxZJLFrQ+UdqF7jKpq+ZJoa2P+aXmI9gfkB" crossorigin="anonymous">
 </head>
 <body>
 
-    <h1>License Detail Check</h1>
+<header>
+    <div class="navbar">
+
+            <div class="navbar-logo">
+                <h1><i class="fas fa-car"></i> Challan System</h1>
+
+        </div>
+    </div>
+    <hr class="hr hr-blurry" />
+</header>
     <div class="container">
-        <h1 class="text-center">Check and Search License Details</h1>
+        <h1 class="smaller-heading">Check License Details</h1>
         <form action="/checkLicense" method="post" class="text-center">
+            <div class = "form-container">
             <input type="text" name="licenseNumber" placeholder="Enter License Number">
             <button type="submit">Search</button>
+                </div>
         </form>
 
         {% if result %}
@@ -105,12 +169,15 @@
     </div>
     <br><br><br>
 
-    <h1>Vehicle Detail Check</h1>
+
     <div class="container">
-        <h1 class="text-center">Check and Search Vehicle Details</h1>
+        <h1 class="smaller-heading">Check Vehicle Details</h1>
         <form action="/checkRegistration" method="post" class="text-center">
+            <div class="form-container">
             <input type="text" name="registrationNumber" placeholder="Enter Registration Number">
             <button type="submit">Search</button>
+                </div>
+
         </form>
 
         {% if result %}
@@ -127,12 +194,12 @@
             <p><b>Vehicle Custom Tac Id:</b> {{ result.VehicleCustomtaxId}}</p>
         </div>
             <input type="hidden" value="{{result.registrationId}}">
-        <button onclick="window.location.href='/issueNewChallan'" >Create Challan</button>
+        <button type="submit11" onclick="window.location.href='/issueNewChallan'">Create Challan</button>
     </form>
         {% else %}
         <p class="text-center">No record found {{ registrationNumber }}</p>
 
-        <button onclick="window.location.href='/issueNewChallan'">Create Challan</button>
+        <button type="submit11" onclick="window.location.href='/issueNewChallan'">Create Challan</button>
     </form>
         {% endif %}
     </div>

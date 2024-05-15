@@ -15,13 +15,27 @@
             --card-background-color-blue: royalblue;
             --card-text-color: white;
         }
+
         .navbar {
-            padding: 10px 20px;
+            margin-top: 0px;
+            padding: 0px 20px;
+            cursor: pointer;
+
         }
-        .navbar-logo img {
-            height: 40px;
-            width: auto;
-        }
+
+   .navbar-logo h1 {
+    font-size: 30px; /* Set font size */
+    color: #4169e1; /* Set text color */
+    font-weight: bold; /* Make text bold */
+    white-space: nowrap; /* Prevent line break */
+}
+   .hr-blurry {
+
+    border: none;
+    height: 2px; /* Adjust height as needed */
+    background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+    margin: 2px 0; /* Add some margin for spacing */
+}
         .admin-detail {
             text-align: center;
             margin-bottom: 20px;
@@ -74,16 +88,21 @@
         }
     </style>
     <script src="https://kit.fontawesome.com/0f9c074925.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-9/1xGhlZGCr4HAA3ZbxObPpXM87W2KxZJLFrQ+UdqF7jKpq+ZJoa2P+aXmI9gfkB" crossorigin="anonymous">
+
+
 </head>
 <body>
-<div class="navbar">
+<header>
+    <div class="navbar">
     <div class="container col-lg-3">
         <div class="navbar-logo">
-            <img src="images/sample_traffic.png" alt="Logo">
+            <h1><i class="fas fa-car"></i> Challan System</h1>
         </div>
     </div>
 </div>
 <hr class="hr hr-blurry" />
+</header>
 
 
 
