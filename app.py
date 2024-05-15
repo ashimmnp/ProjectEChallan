@@ -9,6 +9,7 @@ from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 import traceback
 from datetime import datetime
+import re
 
 app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/dataechallan'
@@ -150,10 +151,10 @@ def login():
                 session['usertype'] = user.usertype
                 print(user.usertype)
                 if user.usertype == 'admin':
-                    flash('Admin login successful', 'success')
+
                     return redirect(url_for('adminDB',username=user.username))
                 elif user.usertype == 'officer':
-                    flash('Officer login successful', 'success')
+
                     return redirect(url_for('trafficOfficerDB', username=user.username))
                 else:
                     flash('Invalid user type', 'error')
@@ -206,9 +207,6 @@ def addUser():
     return render_template('addUser.html')
 
 
-@app.route('/newChallan', methods=['GET', 'POST'])
-def newChallan():
-    return render_template('newChallan.html')
 
 
 @app.route('/userManagementPortal', methods=['GET', 'POST'])
@@ -359,10 +357,25 @@ def registrationDetailAdd():
     if request.method == 'POST':
         try:
             registration_number = request.form.get('registration_number')
+            if not re.match(r"^[A-Z]+\d{4,6}$",registration_number):
+                flash('Invalid Registration Number Format!\nThe correct format is REG000', 'warning')
+                return redirect(url_for('registrationDetailAdd'))
             vehicle_id = request.form.get('vehicle_id')
+            if not re.match(r"^[A-Z]+\d+$",vehicle_id):
+                flash('Invalid Vehicle Id Format!\nThe correct format is VH000', 'warning')
+                return redirect(url_for('registrationDetailAdd'))
             citizen_id = request.form.get('citizen_id')
+            if not re.match(r"^[a-zA-Z]+\d+$",citizen_id):
+                flash('Invalid Citizen Id Format!\nThe correct format is ctz000', 'warning')
+                return redirect(url_for('registrationDetailAdd'))
             license_id = request.form.get('license_id')
+            if not re.match(r"^[a-zA-Z]+\d+$",license_id):
+                flash('Invalid License Number Format!\nThe correct format is lsCITY000', 'warning')
+                return redirect(url_for('registrationDetailAdd'))
             name = request.form.get('name')
+            if not re.match(r"^[A-Za-z]+(?: [A-Za-z]+)*$", name):
+                flash('Invalid Name Format!\nName must be in alphabetic characters.', 'warning')
+                return redirect(url_for('registrationDetailAdd'))
             registration_expired = request.form.get('registration_expired')
 
             registration_expired_date = datetime.strptime(registration_expired, '%Y-%m-%d').date()
@@ -394,9 +407,7 @@ def registrationDetailAdd():
     return render_template('registrationDetailAdd.html')
 
 
-@app.route('/issueChallan')
-def issueChallan():
-    return render_template('issueChallan.html')
+
 
 
 @app.route('/userProfile', methods = ['GET', 'POST'])

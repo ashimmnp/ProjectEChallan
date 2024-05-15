@@ -116,14 +116,14 @@
                 window.open('/issuedChallan/' + data.history_id+'/'+data.reasons, '_blank');
                 console.log(data.history_id)
                 // Optionally clear the form or show a success message on the current page
-                form.reset();
+                // form.reset();
                 // alert('Challan issued successfully and details opened in a new tab.');
             } else {
-                alert('Failed to issue challan. Please try again.');
+                alert('Failed to issue challan. Please re-review the details.');
             }
         }).catch(error => {
             console.error('Error:', error);
-            alert('Error submitting form.');
+            alert('Error creating challan! Please re-review the details.');
         });
     });
 });
