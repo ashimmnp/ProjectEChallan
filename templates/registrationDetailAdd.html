@@ -99,7 +99,7 @@
 <body>
 <header>
     <div class="navbar">
-        <div class="navbar-logo">
+        <div class="navbar-logo" onclick="window.location.href='/adminDB'">
             <h1><i class="fas fa-car"></i> Challan System</h1>
         </div>
     </div>
@@ -121,27 +121,27 @@
 
             <div class="mb-3">
             <label for="registration_number">Registration Number:</label>
-            <input type="text" id="registration_number" name="registration_number" class="form-control" required>
+            <input type="text" id="registration_number" name="registration_number" class="form-control" value="{{request.form.get('registration_number', '')}}" required>
             </div>
                 <div class="mb-3">
             <label for="vehicle_id">Vehicle ID:</label>
-            <input type="text" id="vehicle_id" name="vehicle_id" class="form-control" required>
+            <input type="text" id="vehicle_id" name="vehicle_id" class="form-control" value="{{request.form.get('vehicle_id', '')}}" required>
                 </div>
                     <div class="mb-3">
             <label for="citizen_id">Citizen ID:</label>
-            <input type="text" id="citizen_id" name="citizen_id" class="form-control" required>
+            <input type="text" id="citizen_id" name="citizen_id" class="form-control" value="{{request.form .get('citizenId', '')}}" required>
                     </div>
              <div class="mb-3">
             <label for="license_id">License ID:</label>
-            <input type="text" id="license_id" name="license_id" class="form-control" required>
+            <input type="text" id="license_id" name="license_id" class="form-control" value="{{request.form .get('license_id', '')}}" required>
              </div>
             <div class="mb-3">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="name" class="form-control" value="{{request.form .get('name', '')}}" required>
             </div>
              <div class="mb-3">
             <label for="registration_expired">Registration Expired:</label>
-            <input type="date" id="registration_expired" name="registration_expired" class="form-control" required>
+            <input type="date" id="registration_expired" name="registration_expired" class="form-control" value="{{request.form .get('registration_expired', '')}}" required>
              </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

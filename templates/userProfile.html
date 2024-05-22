@@ -351,7 +351,7 @@ input[type="password"] {
 <header>
     <div class="navbar">
 
-            <div class="navbar-logo" onclick="window.location.href='/trafficOfficerDB'">
+            <div class="navbar-logo" onclick="back()">
                 <h1><i class="fas fa-car"></i> Challan System</h1>
 
         </div>
@@ -381,7 +381,7 @@ input[type="password"] {
             </div>
 
         </div>
-        <div class="profile-form">
+        <div1 class="profile-form">
             <form action="/userProfile" method="post">
                 <div class="form-group">
                     <div class="input-group">
@@ -399,6 +399,15 @@ input[type="password"] {
                 <div class="bold-text">
                     <span>Change password</span>
                 </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
                 <div class="form-group">
                     <label for="current-password">Current Password</label>
                     <input type="password" id="current-password" name="current-password" placeholder=" ">
@@ -431,25 +440,6 @@ input[type="password"] {
         </div>
     </div>
 </div>
-{% with message = get_flashed_messages() %}
-    {% if message %}
-        <div id="diagonal-message" class="diagonal-message">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card text-white bg-info mb-3">
-                            <div class="card-header"></div>
-                            <div class="card-body">
-                                <p class="card-text">{{ message[0] }}</p>
-                                <button class="btn btn-light" onclick="window.location.reload()">OK</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-{% endwith %}
 <script>
 function confirmLogout() {
     // Display a confirmation dialog
@@ -457,6 +447,9 @@ function confirmLogout() {
         // If the user confirms, submit the form
         document.getElementById("logoutForm").submit();
     }
+}
+function back() {
+    window.history.back();
 }
 </script>
 </body>

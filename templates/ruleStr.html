@@ -46,10 +46,33 @@ th {
     background-color: #f3ebf4;
     font-weight: bold;
 }
+ .navbar-logo h1 {
+    font-size: 30px; /* Set font size */
+    color: #4169e1; /* Set text color */
+    font-weight: bold; /* Make text bold */
+    white-space: nowrap; /* Prevent line break */
+}
+   .hr-blurry {
+
+    border: none;
+    height: 2px; /* Adjust height as needed */
+    background: linear-gradient(to right, transparent, lightgrey, transparent); /* Create a gradient for the blurry effect */
+    margin: 2px 0; /* Add some margin for spacing */
+}
 
 </style>
 </head>
 <body>
+<header>
+    <div class="navbar">
+
+            <div class="navbar-logo" onclick="back()">
+                <h1><i class="fas fa-car"></i>Back to Challan System</h1>
+
+        </div>
+    </div>
+    <hr class="hr hr-blurry" />
+</header>
 <div class="container">
     <h1>Traffic Rules Structure</h1>
     {% for category, rules in rules_category.items() %}
@@ -70,5 +93,10 @@ th {
     </table>
     {% endfor %}
 </div>
+<script>
+    function back() {
+    window.history.back();
+}
+</script>
 </body>
 </html>

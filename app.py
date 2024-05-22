@@ -186,6 +186,25 @@ def addUser():
         location_assigned = request.form['location_assigned']
         password = 'pass1234'
 
+        if not re.match(r"^[A-Za-z]+(?: [A-Za-z]+)*$", name):
+            flash('Invalid Name Format!\nName must be in alphabetic characters.', 'warning')
+            return render_template('addUser.html')
+        if not re.match(r"^[A-Za-z]+\d+$", officer_id):
+            flash('Invalid officer Id Format!\nThe correct format is OffXXX', 'warning')
+            return render_template('addUser.html')
+        if not re.match(r"^\d+$", user_id):
+            flash('Invalid user Id Format!\nThe correct format is XXX', 'warning')
+            return render_template('addUser.html')
+        if not re.match(r"^[A-Za-z]+\d+$", badge_number):
+            flash('Invalid Badge Format!\nThe correct format is BadgeXX', 'warning')
+            return render_template('addUser.html')
+        if not re.match(r"^[A-Za-z]+(?: [A-Za-z]+)*$", name):
+            flash('Invalid rank Format!\nRank must be in alphabetic characters.(Eg: Inspector)', 'warning')
+            return render_template('addUser.html')
+
+
+
+
         # Adding required record in officer table
         new_user_officer = Officer(officerId=officer_id, username=user_name, name=name, badgeNumber=badge_number,
                                    rank=rank, assignedLocation=location_assigned)
@@ -222,6 +241,22 @@ def userManagementPortal():
     else:
         officers = db.session.query(Officer, Users.usertype).join(Users, Officer.username == Users.username).all()
         return render_template('userManagementPortal.html', officers=officers)
+
+@app.route('/challanLogs', methods=['GET', 'POST'])
+def challanLogs():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    today_str = datetime.today().strftime('%Y-%m-%d')
+    today_date = datetime.today().strftime('%Y-%m-%d')
+
+    if request.method == 'POST':
+        sort = request.form['sort']
+        date = datetime.strptime(sort, '%Y-%m-%d').date()
+        filtered_data = ChallanHistory.query.filter_by(dateIssued=date).all()
+    else:
+        filtered_data = ChallanHistory.query.filter_by(dateIssued=today_date).all()
+    total_collection = sum(logs.chargedAmount for logs in filtered_data)
+    return render_template('challanLogs.html', logs=filtered_data, total_collection = total_collection)
 
 
 @app.route('/updateUser/<int:officer_id>', methods=['GET', 'POST'])
@@ -324,6 +359,36 @@ def vehicleDetailAdd():
             vehicle_model = request.form.get('vehicle_model')
             vehicle_custom_tax_id = request.form.get('vehicle_custom_tax_id')
 
+            if not re.match(r"^[A-Z]+\d+$", vehicle_id):
+                flash('Invalid Vehicle Id Format!\nThe correct format is VH000', 'warning')
+                return render_template('vehicleDetailAdd')
+
+            if not re.match(r"^[A-Z]+\d{4,6}$", registration_number):
+                flash('Invalid Registration Number Format!\nThe correct format is REG000', 'warning')
+                return render_template('vehicleDetailAdd')
+            if not re.match(r"^[A-Za-z]+(?: [A-Za-z]+)*$", make):
+                flash('Invalid Name Format!\nVehicle Make must be in alphabetic characters.', 'warning')
+                return render_template('vehicleDetailAdd')
+
+            if not re.match(r"^[A-Z]+\d+$", chassis_number):
+                flash('Invalid Vehicle Id Format!\nThe correct format is CHS000', 'warning')
+                return render_template('vehicleDetailAdd')
+
+            if not re.match(r"^[A-Z]+\d+$", registration_number):
+                flash('Invalid registration_number problem. Format!\nThe correct format is REG000', 'warning')
+                return render_template('vehicleDetailAdd')
+            if not re.match(r"^[A-Z]+\d+$", engine_number):
+                flash('Invalid engine number Format!\nThe correct format is Eng000', 'warning')
+                return render_template('vehicleDetailAdd')
+            if not re.match(r"^[A-Z]+\d+$", engine_number):
+                flash('Invalid Vehicle Id Format!\nThe correct format is CHS000', 'warning')
+                return render_template('vehicleDetailAdd')
+            if not re.match(r"^[A-Z]+\d+$", vehicle_custom_tax_id):
+                flash('Invalid Vehicle Id Format!\nThe correct format is Thx rea; TX1234', 'warning')
+                return render_template('vehicleDetailAdd')
+
+
+
             # Update configuration data in the database
             configuration = Vehicle(
                 vehicleId=vehicle_id,
@@ -357,26 +422,32 @@ def registrationDetailAdd():
     if request.method == 'POST':
         try:
             registration_number = request.form.get('registration_number')
+            vehicle_id = request.form.get('vehicle_id')
+            citizen_id = request.form.get('citizen_id')
+            license_id = request.form.get('license_id')
+            name = request.form.get('name')
+            registration_expired = request.form.get('registration_expired')
+
             if not re.match(r"^[A-Z]+\d{4,6}$",registration_number):
                 flash('Invalid Registration Number Format!\nThe correct format is REG000', 'warning')
-                return redirect(url_for('registrationDetailAdd'))
-            vehicle_id = request.form.get('vehicle_id')
+                return render_template('registrationDetailAdd', registration_number = registration_number, vehicle_id = vehicle_id, citizen_id=citizen_id, license_id=license_id, name=name, registration_expired=registration_expired)
+
             if not re.match(r"^[A-Z]+\d+$",vehicle_id):
                 flash('Invalid Vehicle Id Format!\nThe correct format is VH000', 'warning')
-                return redirect(url_for('registrationDetailAdd'))
-            citizen_id = request.form.get('citizen_id')
-            if not re.match(r"^[a-zA-Z]+\d+$",citizen_id):
-                flash('Invalid Citizen Id Format!\nThe correct format is ctz000', 'warning')
-                return redirect(url_for('registrationDetailAdd'))
-            license_id = request.form.get('license_id')
-            if not re.match(r"^[a-zA-Z]+\d+$",license_id):
-                flash('Invalid License Number Format!\nThe correct format is lsCITY000', 'warning')
-                return redirect(url_for('registrationDetailAdd'))
-            name = request.form.get('name')
+                return render_template('registrationDetailAdd', registration_number = registration_number, vehicle_id = vehicle_id, citizen_id=citizen_id, license_id=license_id, name=name, registration_expired=registration_expired)
+
+            if not re.match(r"^\d{2}-\d{2}-\d{2}-\d{5}$",citizen_id):
+                flash('Invalid Citizen Id Format!\nThe correct format is 12-12-12-12345', 'warning')
+                return render_template('registrationDetailAdd', registration_number = registration_number, vehicle_id = vehicle_id, citizen_id=citizen_id, license_id=license_id, name=name, registration_expired=registration_expired)
+
+            if not re.match(r"^\d{2}-\d{2}-\d{8}$",license_id):
+                flash('Invalid License Number Format!\nThe correct format is 12-12-12345678', 'warning')
+                return render_template('registrationDetailAdd', registration_number = registration_number, vehicle_id = vehicle_id, citizen_id=citizen_id, license_id=license_id, name=name, registration_expired=registration_expired)
+
             if not re.match(r"^[A-Za-z]+(?: [A-Za-z]+)*$", name):
                 flash('Invalid Name Format!\nName must be in alphabetic characters.', 'warning')
-                return redirect(url_for('registrationDetailAdd'))
-            registration_expired = request.form.get('registration_expired')
+                return render_template('/registrationDetailAdd', registration_number = registration_number, vehicle_id = vehicle_id, citizen_id=citizen_id, license_id=license_id, name=name, registration_expired=registration_expired)
+
 
             registration_expired_date = datetime.strptime(registration_expired, '%Y-%m-%d').date()
             current_date = datetime.now().date()
@@ -399,7 +470,7 @@ def registrationDetailAdd():
             db.session.commit()
             flash('Registration completed successfully', 'success')
         except Exception as e:
-            flash(f'An error occurred: {str(e)}', 'error')
+            flash(f'An error occurred adding records: {str(e)}', 'error')
 
         return redirect(url_for('registrationDetailAdd'))  # Redirect to home page after registration
     else:

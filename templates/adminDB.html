@@ -110,7 +110,7 @@
 
     <div class="container admin-detail">
         <h1>Welcome Back!</h1>
-        <h3>Admin {{username}}</h3>
+        <h3>{{username}}</h3>
     </div>
 
     <div class="row justify-content-center">
@@ -137,19 +137,26 @@
         </div>
          <div class="card-red col-lg-3" onclick="window.location.href='/userManagementPortal'">
             <div class="card-content">
-                <i class="fa fa-gears"></i>
+                <i class="fa-solid fa-calendar-week"></i> <i class="fa fa-gears"></i>
                 <h3>User Management Portal</h3>
                 <p>Click to go to Portal</p>
             </div>
         </div>
-        <div class="card-blue col-lg-3" onclick="window.location.href='/rulesPortal'">
+        <div class="card-blue col-lg-3" onclick="window.location.href='/challanLogs'">
+            <div class="card-content">
+                <i class="fa-solid fa-scroll"></i> <i class="fa-solid fa-calendar-week"></i>
+                <h3>Challan Logs</h3>
+                <p>Click to go to Portal</p>
+            </div>
+        </div>
+        <div class="card-red col-lg-3" onclick="window.location.href='/rulesPortal'">
             <div class="card-content">
                 <i class="fa-regular fa-id-card"></i> <i class="fa fa-plus"></i>
                 <h3>Rules Management Portal</h3>
                 <p>Click to go to Rules Portal</p>
             </div>
         </div>
-        <div class="card-red col-lg-3" onclick="window.location.href='/userProfile'">
+        <div class="card-blue col-lg-3" onclick="window.location.href='/userProfile'">
             <div class="card-content">
                 <i class="fa fa-gears"></i>
                 <h3>Settings</h3>
